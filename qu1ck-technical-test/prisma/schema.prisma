@@ -14,10 +14,10 @@ datasource db {
 }
 
 model Stocks {
-  id                 Int         @id @default(autoincrement())
-  ingredient_name    String
-  quantity           Int
-  unit_of_measurment StocksUnits
+  id                  Int         @id @default(autoincrement())
+  ingredient_name     String
+  quantity            Int
+  unit_of_measurement StocksUnits
 }
 
 model Requests {
@@ -29,7 +29,7 @@ model Requests {
 
 enum StocksUnits {
   gram // tomato, onion...
-  mililiter // oil, tomato sauce...
+  milliliter // oil, tomato sauce...
   unit // egg...
 }
 

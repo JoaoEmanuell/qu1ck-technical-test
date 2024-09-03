@@ -10,6 +10,10 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "strictNullChecks": false,
+    "removeComments": true,
+    "noImplicitAny": true,
+    "experimentalDecorators": true,
     "jsx": "preserve",
     "incremental": true,
     "plugins": [
