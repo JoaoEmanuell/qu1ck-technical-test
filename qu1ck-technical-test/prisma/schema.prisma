@@ -24,7 +24,7 @@ model Requests {
   id            Int           @id @default(autoincrement())
   request_itens String
   date          DateTime
-  status        RequestStatus
+  status        RequestStatus @default(received)
 }
 
 enum StocksUnits {

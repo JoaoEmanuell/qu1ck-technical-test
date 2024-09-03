@@ -3,25 +3,22 @@ import { stockReturnDefault } from "./stockInterfaces";
 
 export interface requestObject {
   id?: number;
-  request_itens: string;
+  request_itens: string | object;
   date: Date;
   status: RequestStatus;
+}
+
+export interface requestObjectUpdate extends requestObject {
+  request_itens: string | object | undefined;
+  date: Date | undefined;
 }
 
 export type requestReturnDefault = stockReturnDefault;
 
 export interface RequestServiceInterface {
-  createRequest(
-    json: requestObject
-  ): Promise<requestObject | stockReturnDefault>;
-  getRequest(id: number): Promise<requestObject | stockReturnDefault>;
-  updateRequest(
-    id: number,
-    json: requestObject
-  ): Promise<requestObject | stockReturnDefault>;
-  updateRequestStatus(
-    id: number,
-    status: RequestStatus
-  ): Promise<requestObject | stockReturnDefault>;
-  deleteRequest(id: number): Promise<stockReturnDefault>;
+  createRequest(json: requestObject): Promise<Response>;
+  getRequest(id: number): Promise<Response>;
+  updateRequest(id: number, json: requestObject): Promise<Response>;
+  updateRequestStatus(id: number, status: RequestStatus): Promise<Response>;
+  deleteRequest(id: number): Promise<Response>;
 }

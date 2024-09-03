@@ -1,4 +1,5 @@
 import { CreateRequestDto } from "@/dtos/requestDtos";
+import { requestService } from "@/service/requestService";
 import { errorReport } from "@/utils/errorReport";
 import { badRequest } from "@/utils/http/badRequest";
 import { validateDto } from "@/utils/validators/validationDto";
@@ -15,5 +16,5 @@ export async function POST(request: Request) {
   if (erros) {
     return badRequest(erros);
   }
-  return Response.json(json);
+  return await requestService.createRequest(json);
 }
