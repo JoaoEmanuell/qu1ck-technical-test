@@ -2,6 +2,8 @@ import { CreateStockDto, EditStockItens } from "@/dtos/stockDtos";
 import { stockService } from "@/service/stockService";
 import { errorReport } from "@/utils/errorReport";
 import { badRequest } from "@/utils/http/badRequest";
+import { createResponse } from "@/utils/http/createResponse";
+import { putResponse } from "@/utils/http/putResponse";
 import { validateDto } from "@/utils/validators/validationDto";
 import { Stocks } from "@prisma/client";
 
@@ -21,7 +23,11 @@ export async function POST(request: Request) {
   if (erros) {
     return badRequest(erros);
   }
-  return await stockService.createStock(json);
+  try {
+    return createResponse(await stockService.createStock(json));
+  } catch (err) {
+    return err;
+  }
 }
 
 export async function PUT(request: Request) {
@@ -41,5 +47,9 @@ export async function PUT(request: Request) {
       return badRequest(erros);
     }
   }
-  return await stockService.editStockItens(data as Stocks[]);
+  try {
+    return putResponse(await stockService.editStockItens(data as Stocks[]));
+  } catch (err) {
+    return err;
+  }
 }

@@ -2,6 +2,8 @@ import { EditStockDto } from "@/dtos/stockDtos";
 import { stockService } from "@/service/stockService";
 import { errorReport } from "@/utils/errorReport";
 import { badRequest } from "@/utils/http/badRequest";
+import { deleteResponse } from "@/utils/http/deleteResponse";
+import { putResponse } from "@/utils/http/putResponse";
 import { validateDto } from "@/utils/validators/validationDto";
 
 export async function PUT(request: Request) {
@@ -24,8 +26,11 @@ export async function PUT(request: Request) {
   if (erros) {
     return badRequest(erros);
   }
-
-  return await stockService.editStockItem(Number(id), json);
+  try {
+    return putResponse(await stockService.editStockItem(Number(id), json));
+  } catch (err) {
+    return err;
+  }
 }
 
 export async function DELETE(request: Request) {
@@ -36,5 +41,9 @@ export async function DELETE(request: Request) {
     return badRequest({ message: "INVALID_DATA", details: "Invalid ID" });
   }
 
-  return await stockService.deleteStockItem(Number(id));
+  try {
+    return deleteResponse(await stockService.deleteStockItem(Number(id)));
+  } catch (err) {
+    return err;
+  }
 }

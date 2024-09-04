@@ -4,28 +4,36 @@ import {
   StockServiceInterface,
 } from "@/interfaces/stockInterfaces";
 import { encryption } from "@/security/encryption";
-import { createResponse } from "@/utils/http/createResponse";
-import { deleteResponse } from "@/utils/http/deleteResponse";
 import { internalServerErrorResponse } from "@/utils/http/internalServerErrorResponse";
-import { putResponse } from "@/utils/http/putResponse";
+import { notFound } from "@/utils/http/notFound";
 import { Stocks } from "@prisma/client";
 
 export class StockService implements StockServiceInterface {
-  async createStock(json: stockObject): Promise<Response> {
+  async createStock(json: stockObject): Promise<Stocks> {
     try {
-      await prisma.stocks.create({
+      return await prisma.stocks.create({
         data: {
-          ingredient_name: await encryption.encryptText(json.ingredient_name),
+          ingredient_name: await encryption.encryptText(
+            json.ingredient_name.toLowerCase()
+          ),
           quantity: json.quantity,
           unit_of_measurement: json.unit_of_measurement,
         },
       });
-      return createResponse({
-        message: "Item added to stock with success",
-      });
     } catch (err) {
       console.error(`Error to add item to stock: ${err}`);
-      return internalServerErrorResponse("Error to add item to stock");
+      throw internalServerErrorResponse("Error to add item to stock");
+    }
+  }
+
+  private async getStockOrNotFound(id: number) {
+    const stock = await prisma.stocks.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    if (!stock) {
+      throw notFound({ message: "stock not found" });
     }
   }
 
@@ -48,52 +56,40 @@ export class StockService implements StockServiceInterface {
     return decryptedStock;
   }
 
-  async editStockItem(id: number, json: stockObject): Promise<Response> {
-    try {
-      if (json.ingredient_name) {
-        json.ingredient_name = await encryption.encryptText(
-          json.ingredient_name
-        );
-      }
-      await prisma.stocks.update({
-        where: {
-          id: id,
-        },
-        data: json,
-      });
-      return putResponse({ message: "Item edited with success" });
-    } catch (err) {
-      console.error(`Error to edit stock item: ${err}`);
-      return internalServerErrorResponse("Error to edit stock item");
-    }
-  }
+  async editStockItem(id: number, json: stockObject): Promise<Stocks> {
+    await this.getStockOrNotFound(id);
 
-  async editStockItens(json: Stocks[]): Promise<Response> {
-    try {
-      await Promise.all(
-        json.map(async (stock) => {
-          await this.editStockItem(stock.id, stock);
-        })
+    if (json.ingredient_name) {
+      json.ingredient_name = await encryption.encryptText(
+        json.ingredient_name.toLowerCase()
       );
-      return putResponse({ message: "Itens edited with success" });
-    } catch (err) {
-      console.error(`Error to edit stock itens: ${err}`);
-      return internalServerErrorResponse("Error to edit stock itens");
     }
+    return await prisma.stocks.update({
+      where: {
+        id: id,
+      },
+      data: json,
+    });
   }
 
-  async deleteStockItem(id: number): Promise<Response> {
-    try {
-      await prisma.stocks.delete({
-        where: {
-          id: id,
-        },
-      });
-      return deleteResponse({ message: "Item deleted with success" });
-    } catch (err) {
-      console.error(`Error to delete stock item: ${err}`);
-      return internalServerErrorResponse("Error to delete stock item");
-    }
+  async editStockItens(json: Stocks[]): Promise<Object> {
+    await Promise.all(
+      json.map(async (stock) => {
+        await this.editStockItem(stock.id, stock);
+      })
+    );
+    return { message: "Itens edited with success" };
+  }
+
+  async deleteStockItem(id: number): Promise<Object> {
+    await this.getStockOrNotFound(id);
+
+    await prisma.stocks.delete({
+      where: {
+        id: id,
+      },
+    });
+    return { message: "Item deleted with success" };
   }
 }
 

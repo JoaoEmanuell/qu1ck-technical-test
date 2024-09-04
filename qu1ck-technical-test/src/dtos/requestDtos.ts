@@ -4,15 +4,14 @@ import {
   IsDateString,
   IsEnum,
   IsNotEmpty,
-  IsObject,
   IsOptional,
   IsString,
 } from "class-validator";
 
 export class CreateRequestDto {
   @IsNotEmpty()
-  @IsObject()
-  request_itens: object;
+  @IsString()
+  request_itens: string;
   @IsDateString()
   @IsNotEmpty()
   date: Date;
@@ -24,7 +23,7 @@ export class CreateRequestDto {
 
 export class EditRequestDto extends CreateRequestDto {
   @IsOptional()
-  request_itens: object;
+  request_itens: string;
   @IsOptional()
   date: Date;
 }

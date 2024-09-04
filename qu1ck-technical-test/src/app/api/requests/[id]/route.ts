@@ -1,7 +1,9 @@
-import { CreateRequestDto, EditRequestDto } from "@/dtos/requestDtos";
+import { EditRequestDto } from "@/dtos/requestDtos";
 import { requestService } from "@/service/requestService";
 import { errorReport } from "@/utils/errorReport";
 import { badRequest } from "@/utils/http/badRequest";
+import { deleteResponse } from "@/utils/http/deleteResponse";
+import { putResponse } from "@/utils/http/putResponse";
 import { validateDto } from "@/utils/validators/validationDto";
 
 export async function GET(request: Request) {
@@ -12,7 +14,11 @@ export async function GET(request: Request) {
     return badRequest({ message: "INVALID_DATA", details: "Invalid ID" });
   }
 
-  return await requestService.getRequest(id);
+  try {
+    return Response.json(await requestService.getRequest(id));
+  } catch (err) {
+    return err;
+  }
 }
 
 export async function DELETE(request: Request) {
@@ -23,7 +29,12 @@ export async function DELETE(request: Request) {
     return badRequest({ message: "INVALID_DATA", details: "Invalid ID" });
   }
 
-  return await requestService.deleteRequest(Number(id));
+  try {
+    return deleteResponse(await requestService.deleteRequest(Number(id)));
+  } catch (err) {
+    console.error(err);
+    return err;
+  }
 }
 
 export async function PUT(request: Request) {
@@ -47,5 +58,9 @@ export async function PUT(request: Request) {
     return badRequest(erros);
   }
 
-  return await requestService.updateRequest(Number(id), json);
+  try {
+    return putResponse(await requestService.updateRequest(Number(id), json));
+  } catch (err) {
+    return err;
+  }
 }
