@@ -27,6 +27,11 @@ model Requests {
   status        RequestStatus @default(received)
 }
 
+model ManagerNotifications {
+  id      Int    @id @default(autoincrement())
+  message String
+}
+
 enum StocksUnits {
   gram // tomato, onion...
   milliliter // oil, tomato sauce...

@@ -6,11 +6,13 @@ import {
 import { encryption } from "@/security/encryption";
 import { internalServerErrorResponse } from "@/utils/http/internalServerErrorResponse";
 import { notFound } from "@/utils/http/notFound";
-import { Stocks } from "@prisma/client";
+import { Stocks, StocksUnits } from "@prisma/client";
+import { managerNotificationsService } from "./managerNotificationService";
 
 export class StockService implements StockServiceInterface {
   async createStock(json: stockObject): Promise<Stocks> {
     try {
+      await this.stockVerification();
       return await prisma.stocks.create({
         data: {
           ingredient_name: await encryption.encryptText(
@@ -53,6 +55,7 @@ export class StockService implements StockServiceInterface {
         decryptedStock.push(stock);
       })
     );
+    await this.stockVerification(decryptedStock);
     return decryptedStock;
   }
 
@@ -64,6 +67,7 @@ export class StockService implements StockServiceInterface {
         json.ingredient_name.toLowerCase()
       );
     }
+    await this.stockVerification();
     return await prisma.stocks.update({
       where: {
         id: id,
@@ -78,6 +82,7 @@ export class StockService implements StockServiceInterface {
         await this.editStockItem(stock.id, stock);
       })
     );
+    await this.stockVerification();
     return { message: "Itens edited with success" };
   }
 
@@ -89,7 +94,35 @@ export class StockService implements StockServiceInterface {
         id: id,
       },
     });
+    await this.stockVerification();
     return { message: "Item deleted with success" };
+  }
+
+  private async stockVerification(stock: Stocks[] = null) {
+    const verifyStockQuantity = (
+      quantity: number,
+      unit_of_measurement: StocksUnits
+    ) => {
+      if (quantity < 5 && unit_of_measurement === "unit") {
+        return true;
+      } else if (
+        (quantity < 1000 && unit_of_measurement === "gram") ||
+        (quantity < 1000 && unit_of_measurement === "milliliter")
+      ) {
+        return true;
+      }
+      return false;
+    };
+    const stocks = stock || (await this.getAllStock());
+    await Promise.all(
+      stocks.map(async (stock) => {
+        if (verifyStockQuantity(stock.quantity, stock.unit_of_measurement)) {
+          await managerNotificationsService.createNotification({
+            message: `Alerta, o estoque de ${stock.ingredient_name} está acabando`,
+          });
+        }
+      })
+    );
   }
 }
 
