@@ -1,14 +1,12 @@
-import { CreateStockDto } from "@/dtos/stockDtos";
+import { CreateStockDto, EditStockItens } from "@/dtos/stockDtos";
 import { stockService } from "@/service/stockService";
 import { errorReport } from "@/utils/errorReport";
 import { badRequest } from "@/utils/http/badRequest";
-import { createResponse } from "@/utils/http/createResponse";
-import { internalServerErrorResponse } from "@/utils/http/internalServerErrorResponse";
 import { validateDto } from "@/utils/validators/validationDto";
+import { Stocks } from "@prisma/client";
 
 export async function GET(request: Request) {
-  const serviceResponse = await stockService.getAllStock();
-  return Response.json(serviceResponse);
+  return stockService.getAllStock();
 }
 
 export async function POST(request: Request) {
@@ -23,9 +21,25 @@ export async function POST(request: Request) {
   if (erros) {
     return badRequest(erros);
   }
-  const serviceResponse = await stockService.createStock(json);
-  if (serviceResponse.error) {
-    return internalServerErrorResponse(serviceResponse.message);
+  return await stockService.createStock(json);
+}
+
+export async function PUT(request: Request) {
+  let json;
+  try {
+    json = await request.json();
+    if (!json.hasOwnProperty("data")) throw "invalid json";
+  } catch (err) {
+    return badRequest(errorReport("INVALID_DATA", "invalid json"));
   }
-  return createResponse(serviceResponse);
+  // validate the data
+  const data = json["data"] as EditStockItens["data"];
+  for (const stock of data) {
+    const dtoInstance = Object.assign(new CreateStockDto(), stock);
+    const erros = await validateDto(dtoInstance);
+    if (erros) {
+      return badRequest(erros);
+    }
+  }
+  return await stockService.editStockItens(data as Stocks[]);
 }

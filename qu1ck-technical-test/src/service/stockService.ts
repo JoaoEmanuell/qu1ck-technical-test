@@ -1,13 +1,17 @@
 import { prisma } from "@/config/prisma";
 import {
   stockObject,
-  stockReturnDefault,
   StockServiceInterface,
 } from "@/interfaces/stockInterfaces";
 import { encryption } from "@/security/encryption";
+import { createResponse } from "@/utils/http/createResponse";
+import { deleteResponse } from "@/utils/http/deleteResponse";
+import { internalServerErrorResponse } from "@/utils/http/internalServerErrorResponse";
+import { putResponse } from "@/utils/http/putResponse";
+import { Stocks } from "@prisma/client";
 
 export class StockService implements StockServiceInterface {
-  async createStock(json: stockObject): Promise<stockReturnDefault> {
+  async createStock(json: stockObject): Promise<Response> {
     try {
       await prisma.stocks.create({
         data: {
@@ -16,63 +20,80 @@ export class StockService implements StockServiceInterface {
           unit_of_measurement: json.unit_of_measurement,
         },
       });
+      return createResponse({
+        message: "Item added to stock with success",
+      });
     } catch (err) {
       console.error(`Error to add item to stock: ${err}`);
-      return {
-        message: "Error to add item to stock",
-        error: true,
-      };
+      return internalServerErrorResponse("Error to add item to stock");
     }
-    return {
-      message: "Item added to stock with success",
-      error: false,
-    };
   }
-  async getAllStock(): Promise<stockObject[]> {
-    const stocks = await prisma.stocks.findMany();
-    let count = 0;
+
+  async getAllStock(): Promise<Response> {
+    const stocks = await prisma.stocks.findMany({
+      orderBy: {
+        id: "asc",
+      },
+    });
     // decrypt stocks
+    const decryptedStock = [] as Stocks[];
     await Promise.all(
       stocks.map(async (stock) => {
-        stocks[count].ingredient_name = await encryption.decipherText(
+        stock.ingredient_name = await encryption.decipherText(
           stock.ingredient_name
         );
-        count++;
+        decryptedStock.push(stock);
       })
     );
-    return stocks;
+    return Response.json(decryptedStock);
   }
-  async editStockItem(
-    id: number,
-    json: stockObject
-  ): Promise<stockReturnDefault> {
+
+  async editStockItem(id: number, json: stockObject): Promise<Response> {
     try {
-      const data = json;
-      data.ingredient_name = await encryption.encryptText(json.ingredient_name);
+      if (json.ingredient_name) {
+        json.ingredient_name = await encryption.encryptText(
+          json.ingredient_name
+        );
+      }
       await prisma.stocks.update({
         where: {
           id: id,
         },
-        data: data,
+        data: json,
       });
+      return putResponse({ message: "Item edited with success" });
     } catch (err) {
       console.error(`Error to edit stock item: ${err}`);
-      return { message: "Error to edit stock item", error: true };
+      return internalServerErrorResponse("Error to edit stock item");
     }
-    return { message: "Item edited with success", error: false };
   }
-  async deleteStockItem(id: number): Promise<stockReturnDefault> {
+
+  async editStockItens(json: Stocks[]): Promise<Response> {
+    try {
+      await Promise.all(
+        json.map(async (stock) => {
+          await this.editStockItem(stock.id, stock);
+        })
+      );
+      return putResponse({ message: "Itens edited with success" });
+    } catch (err) {
+      console.error(`Error to edit stock itens: ${err}`);
+      return internalServerErrorResponse("Error to edit stock itens");
+    }
+  }
+
+  async deleteStockItem(id: number): Promise<Response> {
     try {
       await prisma.stocks.delete({
         where: {
           id: id,
         },
       });
+      return deleteResponse({ message: "Item deleted with success" });
     } catch (err) {
       console.error(`Error to delete stock item: ${err}`);
-      return { message: "Error to delete stock item", error: true };
+      return internalServerErrorResponse("Error to delete stock item");
     }
-    return { message: "Item deleted with success", error: false };
   }
 }
 

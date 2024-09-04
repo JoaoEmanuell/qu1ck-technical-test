@@ -1,4 +1,4 @@
-import { StocksUnits } from "@prisma/client";
+import { Stocks, StocksUnits } from "@prisma/client";
 
 export interface stockObject {
   id?: number;
@@ -13,8 +13,9 @@ export type stockReturnDefault = {
 };
 
 export interface StockServiceInterface {
-  createStock(json: stockObject): Promise<stockReturnDefault>;
-  getAllStock(): Promise<stockObject[]>;
-  editStockItem(id: number, json: stockObject): Promise<stockReturnDefault>;
-  deleteStockItem(id: number): Promise<stockReturnDefault>;
+  createStock(json: stockObject): Promise<Response>;
+  getAllStock(): Promise<Response>;
+  editStockItem(id: number, json: stockObject): Promise<Response>;
+  editStockItens(json: Stocks[]): Promise<Response>;
+  deleteStockItem(id: number): Promise<Response>;
 }
