@@ -1,7 +1,5 @@
-import { stockObject } from "./stockInterfaces";
-
 export interface ChatServiceInterface {
-  createRequest(json: ChatObjectInterface): Promise<stockObject[]>;
+  createRequest(json: ChatObjectInterface): Promise<Object>;
 }
 
 export interface ChatObjectInterface {

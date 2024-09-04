@@ -6,7 +6,7 @@ import { validateDto } from "@/utils/validators/validationDto";
 import { Stocks } from "@prisma/client";
 
 export async function GET(request: Request) {
-  return stockService.getAllStock();
+  return Response.json(await stockService.getAllStock());
 }
 
 export async function POST(request: Request) {

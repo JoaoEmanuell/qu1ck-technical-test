@@ -14,7 +14,7 @@ export type stockReturnDefault = {
 
 export interface StockServiceInterface {
   createStock(json: stockObject): Promise<Response>;
-  getAllStock(): Promise<Response>;
+  getAllStock(): Promise<Stocks[]>;
   editStockItem(id: number, json: stockObject): Promise<Response>;
   editStockItens(json: Stocks[]): Promise<Response>;
   deleteStockItem(id: number): Promise<Response>;

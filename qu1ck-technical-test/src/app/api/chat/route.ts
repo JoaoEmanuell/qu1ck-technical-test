@@ -1,7 +1,8 @@
 import { CreateChatDto } from "@/dtos/chatDtos";
-import { ChatService } from "@/service/chatService";
+import { chatService } from "@/service/chatService";
 import { errorReport } from "@/utils/errorReport";
 import { badRequest } from "@/utils/http/badRequest";
+import { createResponse } from "@/utils/http/createResponse";
 import { validateDto } from "@/utils/validators/validationDto";
 
 export async function POST(request: Request) {
@@ -16,7 +17,6 @@ export async function POST(request: Request) {
   if (erros) {
     return badRequest(erros);
   }
-  const service = new ChatService();
-  const toReturn = await service.createRequest(json);
-  return Response.json(toReturn);
+
+  return createResponse(await chatService.createRequest(json));
 }

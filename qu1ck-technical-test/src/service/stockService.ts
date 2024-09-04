@@ -29,7 +29,7 @@ export class StockService implements StockServiceInterface {
     }
   }
 
-  async getAllStock(): Promise<Response> {
+  async getAllStock(): Promise<Stocks[]> {
     const stocks = await prisma.stocks.findMany({
       orderBy: {
         id: "asc",
@@ -45,7 +45,7 @@ export class StockService implements StockServiceInterface {
         decryptedStock.push(stock);
       })
     );
-    return Response.json(decryptedStock);
+    return decryptedStock;
   }
 
   async editStockItem(id: number, json: stockObject): Promise<Response> {
