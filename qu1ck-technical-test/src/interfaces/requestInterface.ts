@@ -17,6 +17,7 @@ export type requestReturnDefault = stockReturnDefault;
 
 export interface RequestServiceInterface {
   createRequest(json: requestObject): Promise<Requests>;
+  getAllRequests(): Promise<Requests[]>;
   getRequest(id: number): Promise<Requests>;
   updateRequest(id: number, json: requestObject): Promise<Requests>;
   updateRequestStatus(id: number, status: RequestStatus): Promise<Requests>;

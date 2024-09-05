@@ -19,6 +19,21 @@ export class RequestService implements RequestServiceInterface {
       throw internalServerErrorResponse("Error to create request");
     }
   }
+
+  async getAllRequests(): Promise<Requests[]> {
+    const requests = await prisma.requests.findMany();
+    const decrypted = [] as Requests[];
+    await Promise.all(
+      requests.map(async (request) => {
+        request.request_itens = await encryption.decipherText(
+          request.request_itens
+        );
+        decrypted.push(request);
+      })
+    );
+    return decrypted;
+  }
+
   async getRequest(id: number): Promise<Requests> {
     const data = await prisma.requests.findUnique({
       where: { id: id },
