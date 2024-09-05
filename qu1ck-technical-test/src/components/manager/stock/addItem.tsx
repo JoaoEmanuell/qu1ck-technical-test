@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { useRef, useState } from "react";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 
 type measurementType = "gram" | "milliliter" | "unit" | null;
 
@@ -95,62 +96,66 @@ export const AddItem = () => {
 
   return (
     <div>
-      <table>
-        <td>
-          <input
-            type="text"
-            id=""
-            placeholder="Nome do ingrediente"
-            className="border-b border-black p-1 text-center"
-            required
-            ref={ingredientNameRef}
-          />
-        </td>
-        <td className="px-8">
-          <div className="flex justify-center items-center">
-            <input
-              type="number"
-              min={0}
-              placeholder="Quantidade"
-              className="w-12 text-center"
-              required
-              ref={quantityRef}
-              defaultValue={0}
-            />
-          </div>
-        </td>
-        <td className="pr-4">
-          <Select
-            required
-            onValueChange={(value: measurementType) => {
-              setMeasurement(value);
-            }}
-          >
-            <SelectTrigger className="w-[9.5rem]">
-              <SelectValue
-                placeholder="Unidade de medida"
-                className="text-left"
+      <Table>
+        <TableBody>
+          <TableRow>
+            <TableCell>
+              <input
+                type="text"
+                id=""
+                placeholder="Nome do ingrediente"
+                className="border-b border-black p-1 text-center"
+                required
+                ref={ingredientNameRef}
               />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="gram" className="text-center">
-                quilos
-              </SelectItem>
-              <SelectItem value="milliliter" className="text-center">
-                litros
-              </SelectItem>
-              <SelectItem value="unit" className="text-center">
-                unidades
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </td>
-        <td>
-          <Button variant="green" onClick={addItem}>
-            Salvar
-          </Button>
-        </td>
-      </table>
+            </TableCell>
+            <TableCell>
+              <div className="flex justify-center items-center">
+                <input
+                  type="number"
+                  min={0}
+                  placeholder="Quantidade"
+                  className="w-12 text-center"
+                  required
+                  ref={quantityRef}
+                  defaultValue={0}
+                />
+              </div>
+            </TableCell>
+            <TableCell className="pr-4">
+              <Select
+                required
+                onValueChange={(value: measurementType) => {
+                  setMeasurement(value);
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue
+                    placeholder="Unidade de medida"
+                    className="text-left"
+                  />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="gram" className="text-center">
+                    quilos
+                  </SelectItem>
+                  <SelectItem value="milliliter" className="text-center">
+                    litros
+                  </SelectItem>
+                  <SelectItem value="unit" className="text-center">
+                    unidades
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </TableCell>
+            <TableCell>
+              <Button variant="green" onClick={addItem}>
+                Salvar
+              </Button>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
     </div>
   );
 };

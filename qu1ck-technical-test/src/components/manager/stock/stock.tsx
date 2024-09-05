@@ -12,6 +12,15 @@ import { ChangeEvent, useState } from "react";
 import { AddItem } from "./addItem";
 import { randomKey } from "@/utils/generateRandomKey";
 import { Trash2 } from "lucide-react";
+import {
+  Table,
+  TableCaption,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "@/components/ui/table";
 
 type StockItem = {
   id: number;
@@ -97,13 +106,16 @@ export const Stock = (props: StockProps) => {
 
   return (
     <div key={mainDivElementKey}>
-      <table className="table-auto">
-        <tr>
-          <th>Nome do ingrediente</th>
-          <th>Quantidade</th>
-          <th>Unidade de medida</th>
-        </tr>
-        <tbody>
+      <Table>
+        <TableCaption>Estoque</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Ingrediente</TableHead>
+            <TableHead>Quantidade</TableHead>
+            <TableHead>Unidade de medida</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {stock.map((stockItem) => {
             const dividerFactor =
               stockItem.unit_of_measurement === "unit" ? 1 : 1000;
@@ -115,8 +127,8 @@ export const Stock = (props: StockProps) => {
             };
 
             return (
-              <tr key={stockItem["id"]}>
-                <td>
+              <TableRow key={stockItem["id"]}>
+                <TableCell>
                   <input
                     type="text"
                     name=""
@@ -132,8 +144,8 @@ export const Stock = (props: StockProps) => {
                       );
                     }}
                   />
-                </td>
-                <td className="px-8">
+                </TableCell>
+                <TableCell>
                   <div className="flex justify-center items-center">
                     <input
                       type="number"
@@ -155,8 +167,8 @@ export const Stock = (props: StockProps) => {
                       }}
                     />
                   </div>
-                </td>
-                <td>
+                </TableCell>
+                <TableCell>
                   <Select
                     onValueChange={(value) => {
                       changeStockObject(
@@ -189,8 +201,8 @@ export const Stock = (props: StockProps) => {
                       </SelectItem>
                     </SelectContent>
                   </Select>
-                </td>
-                <td className="pl-4">
+                </TableCell>
+                <TableCell className="pl-4">
                   <Trash2
                     onClick={() => {
                       deleteItem(stockItem.id);
@@ -198,12 +210,12 @@ export const Stock = (props: StockProps) => {
                     color="red"
                     className="cursor-pointer"
                   />
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             );
           })}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
       <div className="mt-4">
         {...addDivElement}
         <div className="flex items-center space-x-4">

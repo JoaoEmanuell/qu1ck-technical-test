@@ -41,9 +41,7 @@ export class RequestService implements RequestServiceInterface {
     if (!data) {
       throw notFound({ message: "request don't exist" });
     }
-    data.request_itens = JSON.parse(
-      await encryption.decipherText(data.request_itens)
-    );
+    data.request_itens = await encryption.decipherText(data.request_itens);
     return data;
   }
   async updateRequest(id: number, json: requestObject): Promise<Requests> {
