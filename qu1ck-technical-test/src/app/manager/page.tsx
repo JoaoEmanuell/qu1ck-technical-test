@@ -8,6 +8,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Stock } from "@/components/manager/stock/stock";
+import { RequestsComponent } from "@/components/manager/requests/requests";
 
 export default function Component() {
   const [activeTab, setActiveTab] = useState<
@@ -15,9 +16,15 @@ export default function Component() {
   >("Estoque");
 
   const [stockComponent, setStockComponent] = useState<JSX.Element | null>();
+  const [requestsComponent, setRequestsComponent] =
+    useState<JSX.Element | null>();
 
   const constructStockComponent = (stock: any[]) => {
     setStockComponent(<Stock stock={stock} />);
+  };
+
+  const constructRequestComponent = (requests: any[]) => {
+    setRequestsComponent(<RequestsComponent requests={requests} />);
   };
 
   useEffect(() => {
