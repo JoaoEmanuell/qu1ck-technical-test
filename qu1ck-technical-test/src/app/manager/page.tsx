@@ -17,6 +17,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import { MessagesComponent } from "@/components/manager/messages/messages";
 
 export default function Component() {
   const [activeTab, setActiveTab] = useState<
@@ -26,6 +27,8 @@ export default function Component() {
   const [stockComponent, setStockComponent] = useState<JSX.Element | null>();
   const [requestsComponent, setRequestsComponent] =
     useState<JSX.Element | null>();
+  const [messagesComponent, setMessagesComponent] =
+    useState<JSX.Element | null>();
 
   const constructStockComponent = (stock: any[]) => {
     setStockComponent(<Stock stock={stock} />);
@@ -33,6 +36,10 @@ export default function Component() {
 
   const constructRequestComponent = (requests: any[]) => {
     setRequestsComponent(<RequestsComponent requests={requests} />);
+  };
+
+  const constructMessagesComponent = (messages: any[]) => {
+    setMessagesComponent(<MessagesComponent messages={messages} />);
   };
 
   useEffect(() => {
@@ -45,6 +52,11 @@ export default function Component() {
     fetch("/api/requests", {}).then((response) => {
       response.json().then((json) => {
         constructRequestComponent(json);
+      });
+    });
+    fetch("/api/manager/notifications", {}).then((response) => {
+      response.json().then((json) => {
+        constructMessagesComponent(json);
       });
     });
   }, []);
@@ -111,7 +123,7 @@ export default function Component() {
             <h2 className="text-xl font-bold mb-4">
               Gerenciamento de mensagens
             </h2>
-            <p>Sessão de mensagens</p>
+            {messagesComponent}
           </div>
         )}
       </main>
