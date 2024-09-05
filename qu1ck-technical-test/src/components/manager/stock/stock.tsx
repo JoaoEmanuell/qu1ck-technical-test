@@ -146,27 +146,25 @@ export const Stock = (props: StockProps) => {
                   />
                 </TableCell>
                 <TableCell>
-                  <div className="flex justify-center items-center">
-                    <input
-                      type="number"
-                      name=""
-                      id=""
-                      min={0}
-                      className="w-12 text-center"
-                      step={0.1}
-                      defaultValue={parseFloat(
-                        `${stockItem.quantity / dividerFactor}`
-                      ).toFixed(1)}
-                      onChange={(element) => {
-                        changeStockObject(
-                          element,
-                          stockItem.id,
-                          "quantity",
-                          dividerFactor
-                        );
-                      }}
-                    />
-                  </div>
+                  <input
+                    type="number"
+                    name=""
+                    id=""
+                    min={0}
+                    className="w-12 text-center"
+                    step={0.1}
+                    defaultValue={parseFloat(
+                      `${stockItem.quantity / dividerFactor}`
+                    ).toFixed(1)}
+                    onChange={(element) => {
+                      changeStockObject(
+                        element,
+                        stockItem.id,
+                        "quantity",
+                        dividerFactor
+                      );
+                    }}
+                  />
                 </TableCell>
                 <TableCell>
                   <Select

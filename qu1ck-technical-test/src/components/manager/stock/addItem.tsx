@@ -110,17 +110,15 @@ export const AddItem = () => {
               />
             </TableCell>
             <TableCell>
-              <div className="flex justify-center items-center">
-                <input
-                  type="number"
-                  min={0}
-                  placeholder="Quantidade"
-                  className="w-12 text-center"
-                  required
-                  ref={quantityRef}
-                  defaultValue={0}
-                />
-              </div>
+              <input
+                type="number"
+                min={0}
+                placeholder="Quantidade"
+                className="w-12 text-center"
+                required
+                ref={quantityRef}
+                defaultValue={0}
+              />
             </TableCell>
             <TableCell className="pr-4">
               <Select
