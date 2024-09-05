@@ -5,6 +5,10 @@ import { badRequest } from "@/utils/http/badRequest";
 import { createResponse } from "@/utils/http/createResponse";
 import { validateDto } from "@/utils/validators/validationDto";
 
+export async function GET(request: Request) {
+  return Response.json(await requestService.getAllRequests());
+}
+
 export async function POST(request: Request) {
   let json;
   try {
