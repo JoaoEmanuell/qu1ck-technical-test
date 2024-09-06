@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useRef, useState } from "react";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
 
 type measurementType = "gram" | "milliliter" | "unit" | null;
 
@@ -100,21 +101,21 @@ export const AddItem = () => {
         <TableBody>
           <TableRow>
             <TableCell>
-              <input
+              <Input
                 type="text"
                 id=""
                 placeholder="Nome do ingrediente"
-                className="border-b border-black p-1 text-center"
+                className="text-center"
                 required
                 ref={ingredientNameRef}
               />
             </TableCell>
             <TableCell>
-              <input
+              <Input
                 type="number"
                 min={0}
                 placeholder="Quantidade"
-                className="w-12 text-center"
+                className="w-24 text-center"
                 required
                 ref={quantityRef}
                 defaultValue={0}

@@ -21,6 +21,7 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
 
 type StockItem = {
   id: number;
@@ -129,12 +130,12 @@ export const Stock = (props: StockProps) => {
             return (
               <TableRow key={stockItem["id"]}>
                 <TableCell>
-                  <input
+                  <Input
                     type="text"
                     name=""
                     id=""
                     defaultValue={stockItem.ingredient_name}
-                    className="border-b border-black p-1 text-center"
+                    className="text-center"
                     onChange={(element) => {
                       changeStockObject(
                         element,
@@ -146,16 +147,16 @@ export const Stock = (props: StockProps) => {
                   />
                 </TableCell>
                 <TableCell>
-                  <input
+                  <Input
                     type="number"
                     name=""
                     id=""
                     min={0}
-                    className="w-12 text-center"
-                    step={0.1}
+                    className="w-24 text-center"
+                    step={stockItem.unit_of_measurement === "unit" ? 1 : 0.1}
                     defaultValue={parseFloat(
                       `${stockItem.quantity / dividerFactor}`
-                    ).toFixed(1)}
+                    ).toFixed(stockItem.unit_of_measurement === "unit" ? 0 : 1)}
                     onChange={(element) => {
                       changeStockObject(
                         element,

@@ -8,17 +8,14 @@
 import { useEffect, useState } from "react";
 import { Stock } from "@/components/manager/stock/stock";
 import { RequestsComponent } from "@/components/manager/requests/requests";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
 import { MessagesComponent } from "@/components/manager/messages/messages";
 import { ReloadButton } from "@/components/ui/reloadButton";
 import { randomKey } from "@/utils/generateRandomKey";
+import {
+  NavigationMenu,
+  NavigationMenuList,
+  NavigationMenuItem,
+} from "@/components/ui/navigation-menu";
 
 type tabs = "Estoque" | "Pedidos" | "Mensagens";
 
@@ -48,20 +45,23 @@ export default function ManagerPage() {
   };
 
   const constructComponents = () => {
+    const fetchInit = {
+      cache: "force-cache",
+    } as RequestInit;
     // get stock
-    fetch("/api/manager/stock", {}).then((response) => {
+    fetch("/api/manager/stock", fetchInit).then((response) => {
       response.json().then((json) => {
         constructStockComponent(json);
       });
     });
     // get requests
-    fetch("/api/requests", {}).then((response) => {
+    fetch("/api/requests", fetchInit).then((response) => {
       response.json().then((json) => {
         constructRequestComponent(json);
       });
     });
     // get notifications
-    fetch("/api/manager/notifications", {}).then((response) => {
+    fetch("/api/manager/notifications", fetchInit).then((response) => {
       response.json().then((json) => {
         constructMessagesComponent(json);
       });
@@ -74,30 +74,42 @@ export default function ManagerPage() {
 
   return (
     <div className="flex flex-col h-screen">
-      <header className="bg-primary text-primary-foreground py-4 px-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
+      <header className="py-4 pl-2 flex items-center justify-between">
         <div className="flex gap-4 mr-4">
-          <DropdownMenu>
-            <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuRadioGroup
-                value={activeTab}
-                onValueChange={(value: string) => {
-                  setActiveTab(value as tabs);
+          <NavigationMenu>
+            <NavigationMenuList className="space-x-4">
+              <NavigationMenuItem
+                onClick={() => {
+                  setActiveTab("Estoque");
                 }}
+                className={`cursor-pointer text-primary-foreground p-2 rounded-sm hover:bg-primary transition-all ${
+                  activeTab === "Estoque" ? "bg-primary" : "bg-blue-400"
+                }`}
               >
-                <DropdownMenuRadioItem value="Estoque">
-                  Estoque
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="Pedidos">
-                  Pedidos
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="Mensagens">
-                  Mensagens
-                </DropdownMenuRadioItem>
-              </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                Estoque
+              </NavigationMenuItem>
+              <NavigationMenuItem
+                onClick={() => {
+                  setActiveTab("Pedidos");
+                }}
+                className={`cursor-pointer text-primary-foreground p-2 rounded-sm hover:bg-primary transition-all ${
+                  activeTab === "Pedidos" ? "bg-primary" : "bg-blue-400"
+                }`}
+              >
+                Pedidos
+              </NavigationMenuItem>
+              <NavigationMenuItem
+                onClick={() => {
+                  setActiveTab("Mensagens");
+                }}
+                className={`cursor-pointer text-primary-foreground p-2 rounded-sm hover:bg-primary transition-all ${
+                  activeTab === "Mensagens" ? "bg-primary" : "bg-blue-400"
+                }`}
+              >
+                Mensagens
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
         </div>
       </header>
       <main className="flex-1 bg-background p-8">
