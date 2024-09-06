@@ -7,4 +7,7 @@ export interface ManagerNotificationServiceInterface {
   ): Promise<ManagerNotifications>;
   getAllNotifications(): Promise<ManagerNotifications[]>;
   deleteNotification(id: number): Promise<Object>;
+  deleteAllNotificationsUsingObject(
+    notifications: ManagerNotifications[]
+  ): Promise<Object>;
 }

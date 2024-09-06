@@ -18,4 +18,5 @@ export interface StockServiceInterface {
   editStockItem(id: number, json: stockObject): Promise<Stocks>;
   editStockItens(json: Stocks[]): Promise<Object>;
   deleteStockItem(id: number): Promise<Object>;
+  verifyStockItens(stock: Stocks[]): Promise<void>;
 }
