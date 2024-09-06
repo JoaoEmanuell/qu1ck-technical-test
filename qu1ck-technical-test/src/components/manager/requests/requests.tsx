@@ -93,7 +93,14 @@ export const RequestsComponent = (props: RequestProps) => {
                   {request.request_itens.replaceAll(",", ", ")}
                 </TableCell>
                 <TableCell>
-                  {new Date(request.date).toLocaleDateString()}
+                  {new Date(request.date).toLocaleString("pt-BR", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false, // Opcional, para formato 24 horas
+                  })}
                 </TableCell>
                 <TableCell>
                   <Select
