@@ -1,3 +1,4 @@
+import { sleep } from "@/utils/sleep";
 import { LucideProps, RefreshCw } from "lucide-react";
 import { useState } from "react";
 
@@ -9,7 +10,7 @@ export const ReloadButton = (props: reloadButtonProps) => {
 
   const animate = async () => {
     setSpin("animate-spin");
-    await new Promise((resolve) => setTimeout(resolve, 1000)); // 1 second
+    await sleep(1000); // one second
     setSpin("");
   };
 

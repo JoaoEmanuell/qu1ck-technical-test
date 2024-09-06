@@ -7,5 +7,5 @@ export default function ChatPage() {
       message: "Seja bem vindo a pizzaria, em que posso ajudar?",
     },
   ];
-  return <ChatPageUi messages={messages as messagesType} />;
+  return <ChatPageUi messages={messages as messagesType[]} />;
 }

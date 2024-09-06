@@ -9,44 +9,125 @@
 import { useEffect, useRef, useState } from "react";
 import { BotMessage } from "./botMessage";
 import { UserMessage } from "./userMessage";
+import { Button } from "../ui/button";
 
-export type messagesType = { type: "user" | "bot"; message: string }[];
+export type messagesType = {
+  type: "user" | "bot";
+  message: string;
+  awaitResponse?: boolean;
+};
 
 interface chatPageUiProps {
-  messages: messagesType;
+  messages: messagesType[];
 }
 
 export function ChatPageUi(props: chatPageUiProps) {
   const inputRef = useRef<null | HTMLInputElement>(null);
-  const [messages, setMessages] = useState(props.messages);
-  const [messageComponent, setMessageComponent] = useState<
-    JSX.Element[] | null
-  >(null);
+  const [messages, setMessages] = useState<messagesType[]>(props.messages);
+  const [messageComponent, setMessageComponent] = useState<JSX.Element[]>([]);
+  const [inputsDisabled, setInputsDisabled] = useState<boolean>(false);
 
-  const sendMessageAction = () => {
-    const message = inputRef?.current.value;
-    messages.push({
+  const sendMessageToApi = async (
+    message: string,
+    messages: messagesType[]
+  ) => {
+    constructMessageComponent([
+      ...messages,
+      {
+        type: "bot",
+        message: "",
+        awaitResponse: true,
+      },
+    ]);
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      body: JSON.stringify({
+        text: message,
+      }),
+      signal: AbortSignal.timeout(15000), // 15 seconds
+    });
+    if (response.status === 201) {
+      const json = await response.json();
+      if (json.status) {
+        changeLastMessage({
+          type: "bot",
+          message: json.message_for_client,
+          awaitResponse: false,
+        });
+      } else {
+        changeLastMessage({
+          type: "bot",
+          message: json.message_for_client
+            ? json.message_for_client
+            : "Desculpe, infelizmente não foi possível realizar o seu pedido!",
+          awaitResponse: false,
+        });
+      }
+    } else {
+      changeLastMessage({
+        type: "bot",
+        message:
+          "Desculpe, infelizmente não foi possível realizar o seu pedido!",
+        awaitResponse: false,
+      });
+    }
+  };
+
+  const sendMessageAction = async () => {
+    const message = inputRef?.current.value.trim();
+    if (message === "") return; // not send message if is empty
+    inputRef!.current.value = "";
+
+    blockInputs(true); // block inputs
+
+    const messagesCopy = messages;
+    messagesCopy.push({
       type: "user",
       message: message,
     });
-    setMessages(messages);
-    inputRef!.current.value = "";
-    constructMessagesComponent(messages);
+    constructMessageComponent(messagesCopy);
+
+    await sendMessageToApi(message, messages);
+
+    blockInputs(false);
   };
 
-  const constructMessagesComponent = (messages: messagesType) => {
-    setMessageComponent(
-      messages.map((message) => {
-        if (message.type === "bot") {
-          return <BotMessage key={message.message} text={message.message} />;
-        }
-        return <UserMessage key={message.message} text={message.message} />;
-      })
-    );
+  const constructMessageComponent = (messages: messagesType[]) => {
+    setMessages(messages);
+    const messagesComponentToUpdate: JSX.Element[] = [];
+    messages.map((message) => {
+      messagesComponentToUpdate.push(
+        message.type === "bot" ? (
+          <BotMessage
+            key={message.message}
+            text={message.message}
+            awaitResponse={message.awaitResponse}
+          />
+        ) : (
+          <UserMessage key={message.message} text={message.message} />
+        )
+      );
+    });
+    setMessageComponent(messagesComponentToUpdate);
+  };
+
+  const addMessageForMessageComponent = (message: messagesType) => {
+    constructMessageComponent([...messages, message]);
+  };
+
+  const blockInputs = (status: boolean) => {
+    setInputsDisabled(status);
+  };
+
+  const changeLastMessage = (message: messagesType) => {
+    const messagesComponentCopy = [...messageComponent];
+    messagesComponentCopy.pop();
+    setMessageComponent(messagesComponentCopy);
+    addMessageForMessageComponent(message);
   };
 
   useEffect(() => {
-    constructMessagesComponent(messages);
+    constructMessageComponent(messages);
   }, []);
 
   return (
@@ -64,13 +145,15 @@ export function ChatPageUi(props: chatPageUiProps) {
             if (key.code === "Enter" || key.code === "NumpadEnter")
               sendMessageAction();
           }}
+          disabled={inputsDisabled}
         />
-        <button
-          className="bg-[#6c5ce7] text-white rounded-lg px-4 py-2 hover:bg-[#5a4ec7]"
+        <Button
+          variant="purple"
           onClick={sendMessageAction}
+          disabled={inputsDisabled}
         >
           Enviar
-        </button>
+        </Button>
       </div>
     </div>
   );
