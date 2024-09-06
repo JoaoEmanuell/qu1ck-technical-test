@@ -14,10 +14,10 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { MessagesComponent } from "@/components/manager/messages/messages";
+import { ReloadButton } from "@/components/ui/reloadButton";
 
 export default function Component() {
   const [activeTab, setActiveTab] = useState<
@@ -42,23 +42,29 @@ export default function Component() {
     setMessagesComponent(<MessagesComponent messages={messages} />);
   };
 
-  useEffect(() => {
+  const constructComponents = () => {
     // get stock
     fetch("/api/manager/stock", {}).then((response) => {
       response.json().then((json) => {
         constructStockComponent(json);
       });
     });
+    // get requests
     fetch("/api/requests", {}).then((response) => {
       response.json().then((json) => {
         constructRequestComponent(json);
       });
     });
+    // get notifications
     fetch("/api/manager/notifications", {}).then((response) => {
       response.json().then((json) => {
         constructMessagesComponent(json);
       });
     });
+  };
+
+  useEffect(() => {
+    constructComponents();
   }, []);
 
   return (
@@ -108,21 +114,43 @@ export default function Component() {
       <main className="flex-1 bg-background p-8">
         {activeTab === "Estoque" && (
           <div className="bg-card text-card-foreground rounded-lg p-6 shadow-md overflow-x-auto">
-            <h2 className="text-xl font-bold mb-4">Gerenciamento de estoque</h2>
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-bold mb-4">
+                Gerenciamento de estoque
+              </h2>
+              <ReloadButton
+                className="cursor-pointer"
+                onClick={constructComponents}
+              />
+            </div>
             {stockComponent}
           </div>
         )}
         {activeTab === "Pedidos" && (
           <div className="bg-card text-card-foreground rounded-lg p-6 shadow-md">
-            <h2 className="text-xl font-bold mb-4">Gerenciamento de pedidos</h2>
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-bold mb-4">
+                Gerenciamento de pedidos
+              </h2>
+              <ReloadButton
+                className="cursor-pointer"
+                onClick={constructComponents}
+              />
+            </div>
             {requestsComponent}
           </div>
         )}
         {activeTab === "Mensagens" && (
           <div className="bg-card text-card-foreground rounded-lg p-6 shadow-md">
-            <h2 className="text-xl font-bold mb-4">
-              Gerenciamento de mensagens
-            </h2>
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-bold mb-4">
+                Gerenciamento de mensagens
+              </h2>
+              <ReloadButton
+                className="cursor-pointer"
+                onClick={constructComponents}
+              />
+            </div>
             {messagesComponent}
           </div>
         )}

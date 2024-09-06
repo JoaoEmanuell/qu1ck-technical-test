@@ -72,7 +72,11 @@ export const MessagesComponent = (props: MessagesComponentProps) => {
   return (
     <div key={mainDivKey}>
       <div>
-        <Button variant="destructive" onClick={deleteAllMessages}>
+        <Button
+          variant="destructive"
+          onClick={deleteAllMessages}
+          disabled={messages.length !== 0 ? false : true}
+        >
           Deletar mensagens
         </Button>
       </div>

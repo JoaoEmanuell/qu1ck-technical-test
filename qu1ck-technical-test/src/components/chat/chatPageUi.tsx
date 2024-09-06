@@ -7,8 +7,8 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { BotMessage } from "../chat/botMessage";
-import { UserMessage } from "../chat/userMessage";
+import { BotMessage } from "./botMessage";
+import { UserMessage } from "./userMessage";
 
 export type messagesType = { type: "user" | "bot"; message: string }[];
 

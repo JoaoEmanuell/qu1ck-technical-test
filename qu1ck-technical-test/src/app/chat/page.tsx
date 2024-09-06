@@ -1,4 +1,4 @@
-import { ChatPageUi, messagesType } from "@/components/ui/chatPageUi";
+import { ChatPageUi, messagesType } from "@/components/chat/chatPageUi";
 
 export default function ChatPage() {
   const messages = [
