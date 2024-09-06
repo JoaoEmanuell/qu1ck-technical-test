@@ -6,23 +6,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Stock } from "@/components/manager/stock/stock";
 import { RequestsComponent } from "@/components/manager/requests/requests";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
-  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { MessagesComponent } from "@/components/manager/messages/messages";
 import { ReloadButton } from "@/components/ui/reloadButton";
+import { randomKey } from "@/utils/generateRandomKey";
 
-export default function Component() {
-  const [activeTab, setActiveTab] = useState<
-    "Estoque" | "Pedidos" | "Mensagens"
-  >("Estoque");
+type tabs = "Estoque" | "Pedidos" | "Mensagens";
+
+export default function ManagerPage() {
+  const [activeTab, setActiveTab] = useState<tabs>("Estoque");
 
   const [stockComponent, setStockComponent] = useState<JSX.Element | null>();
   const [requestsComponent, setRequestsComponent] =
@@ -31,15 +32,19 @@ export default function Component() {
     useState<JSX.Element | null>();
 
   const constructStockComponent = (stock: any[]) => {
-    setStockComponent(<Stock stock={stock} />);
+    setStockComponent(<Stock stock={stock} key={randomKey()} />);
   };
 
   const constructRequestComponent = (requests: any[]) => {
-    setRequestsComponent(<RequestsComponent requests={requests} />);
+    setRequestsComponent(
+      <RequestsComponent requests={requests} key={randomKey()} />
+    );
   };
 
   const constructMessagesComponent = (messages: any[]) => {
-    setMessagesComponent(<MessagesComponent messages={messages} />);
+    setMessagesComponent(
+      <MessagesComponent messages={messages} key={randomKey()} />
+    );
   };
 
   const constructComponents = () => {
@@ -74,39 +79,23 @@ export default function Component() {
         <div className="flex gap-4 mr-4">
           <DropdownMenu>
             <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-blue-200">
-              <DropdownMenuLabel>
-                <Button
-                  className={
-                    activeTab === "Estoque" ? "bg-blue-500 rounded-sm" : "ghost"
-                  }
-                  onClick={() => setActiveTab("Estoque")}
-                >
+            <DropdownMenuContent>
+              <DropdownMenuRadioGroup
+                value={activeTab}
+                onValueChange={(value: string) => {
+                  setActiveTab(value as tabs);
+                }}
+              >
+                <DropdownMenuRadioItem value="Estoque">
                   Estoque
-                </Button>
-              </DropdownMenuLabel>
-              <DropdownMenuItem>
-                <Button
-                  className={
-                    activeTab === "Pedidos" ? "bg-blue-500 rounded-sm" : "ghost"
-                  }
-                  onClick={() => setActiveTab("Pedidos")}
-                >
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="Pedidos">
                   Pedidos
-                </Button>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Button
-                  className={
-                    activeTab === "Mensagens"
-                      ? "bg-blue-500 rounded-sm"
-                      : "ghost"
-                  }
-                  onClick={() => setActiveTab("Mensagens")}
-                >
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="Mensagens">
                   Mensagens
-                </Button>
-              </DropdownMenuItem>
+                </DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

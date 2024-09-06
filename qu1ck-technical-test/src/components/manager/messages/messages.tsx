@@ -48,21 +48,17 @@ export const MessagesComponent = (props: MessagesComponentProps) => {
   };
 
   const deleteAllMessages = async () => {
-    if (messages.length === 0) {
-      return;
-    }
     const confirmReturn = confirm(
       "Tem certeza que deseja deletar todas as mensagens?"
     );
     if (confirmReturn) {
       alert("Deletando todas as mensagens");
-      await Promise.all(
-        messages.map(async (message) => {
-          await fetch(`/api/manager/notifications/${message.id}/`, {
-            method: "DELETE",
-          });
-        })
-      );
+      await fetch(`/api/manager/notifications/`, {
+        method: "PUT",
+        body: JSON.stringify({
+          notifications: messages,
+        }),
+      });
       setMessages([]);
       setMainDivKey(randomKey());
       alert("Todas as mensagens foram deletadas com sucesso!");
