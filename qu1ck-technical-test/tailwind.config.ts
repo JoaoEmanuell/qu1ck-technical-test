@@ -86,11 +86,6 @@ const config: Config = {
           "0%": { transform: "translateX(+100%)", opacity: "0" },
           "100%": { transform: "translateX(0)", opacity: "1" },
         },
-        typewriter: {
-          to: {
-            left: "100%",
-          },
-        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -98,7 +93,6 @@ const config: Config = {
         "left-to-right": "left-to-right 1.5s ease-in-out",
         "left-to-right-2-seconds": "left-to-right 2s ease-in-out",
         "right-to-left": "right-to-left 1s ease-in-out",
-        typewriter: "typewriter 2s steps(11) forwards",
       },
     },
   },
