@@ -46,7 +46,7 @@ export default function ManagerPage() {
 
   const constructComponents = () => {
     const fetchInit = {
-      cache: "force-cache",
+      cache: "default",
     } as RequestInit;
     // get stock
     fetch("/api/manager/stock", fetchInit).then((response) => {
