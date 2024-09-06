@@ -1,8 +1,12 @@
-import { CreateManagerNotificationDto } from "@/dtos/notificationsDto";
+import {
+  CreateManagerNotificationDto,
+  DeleteManagerNotificationsDto,
+} from "@/dtos/notificationsDto";
 import { managerNotificationsService } from "@/service/managerNotificationService";
 import { errorReport } from "@/utils/errorReport";
 import { badRequest } from "@/utils/http/badRequest";
 import { createResponse } from "@/utils/http/createResponse";
+import { deleteResponse } from "@/utils/http/deleteResponse";
 import { validateDto } from "@/utils/validators/validationDto";
 
 export async function GET(request: Request) {
@@ -24,6 +28,29 @@ export async function POST(request: Request) {
   try {
     return createResponse(
       await managerNotificationsService.createNotification(json)
+    );
+  } catch (err) {
+    return err;
+  }
+}
+
+export async function PUT(request: Request) {
+  let json;
+  try {
+    json = await request.json();
+  } catch (err) {
+    return badRequest(errorReport("INVALID_DATA", "invalid json"));
+  }
+  const dtoInstance = Object.assign(new DeleteManagerNotificationsDto(), json);
+  const erros = await validateDto(dtoInstance);
+  if (erros) {
+    return badRequest(erros);
+  }
+  try {
+    return deleteResponse(
+      await managerNotificationsService.deleteAllNotificationsUsingObject(
+        json.notifications
+      )
     );
   } catch (err) {
     return err;

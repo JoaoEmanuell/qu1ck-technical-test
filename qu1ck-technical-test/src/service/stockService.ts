@@ -12,7 +12,6 @@ import { managerNotificationsService } from "./managerNotificationService";
 export class StockService implements StockServiceInterface {
   async createStock(json: stockObject): Promise<Stocks> {
     try {
-      await this.stockVerification();
       return await prisma.stocks.create({
         data: {
           ingredient_name: await encryption.encryptText(
@@ -55,7 +54,6 @@ export class StockService implements StockServiceInterface {
         decryptedStock.push(stock);
       })
     );
-    await this.stockVerification(decryptedStock);
     return decryptedStock;
   }
 
@@ -67,7 +65,7 @@ export class StockService implements StockServiceInterface {
         json.ingredient_name.toLowerCase()
       );
     }
-    await this.stockVerification();
+
     return await prisma.stocks.update({
       where: {
         id: id,
@@ -82,7 +80,7 @@ export class StockService implements StockServiceInterface {
         await this.editStockItem(stock.id, stock);
       })
     );
-    await this.stockVerification();
+
     return { message: "Itens edited with success" };
   }
 
@@ -94,11 +92,11 @@ export class StockService implements StockServiceInterface {
         id: id,
       },
     });
-    await this.stockVerification();
+
     return { message: "Item deleted with success" };
   }
 
-  private async stockVerification(stock: Stocks[] = null) {
+  async verifyStockItens(stock: Stocks[] = null) {
     const verifyStockQuantity = (
       quantity: number,
       unit_of_measurement: StocksUnits

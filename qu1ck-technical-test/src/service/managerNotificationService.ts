@@ -44,12 +44,29 @@ export class ManagerNotificationService
     if (!notification) {
       throw notFound({ message: "notification not found" });
     }
+    console.log(`delete notification: ${id}`);
+
     await prisma.managerNotifications.delete({
       where: {
         id: id,
       },
     });
     return { message: "notification deleted with success" };
+  }
+
+  async deleteAllNotificationsUsingObject(
+    notifications: ManagerNotifications[]
+  ): Promise<Object> {
+    try {
+      await Promise.all(
+        notifications.map(async (notification) => {
+          await this.deleteNotification(notification.id);
+        })
+      );
+      return { message: "notifications deleted with success" };
+    } catch (err: any) {
+      throw internalServerErrorResponse("Error to delete notifications");
+    }
   }
 }
 
