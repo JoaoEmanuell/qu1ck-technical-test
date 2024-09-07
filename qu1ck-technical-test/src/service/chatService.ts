@@ -41,18 +41,9 @@ export class ChatService implements ChatServiceInterface {
     // register the request
 
     const request = {
-      request_itens: "",
+      request_itens: difyJson.items.join(";"),
       date: new Date(),
     };
-
-    difyJson.database.map((stock) => {
-      request.request_itens += `${stock.ingredient_name},`;
-    });
-
-    request.request_itens = request.request_itens.substring(
-      0,
-      request.request_itens.length - 1
-    ); // remove the last ','
 
     await requestService.createRequest(request as requestObject); // create request
 
