@@ -1,11 +1,13 @@
+/**
+ * Define the requests columns used by data table
+ */
+
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { request } from "./requests";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, Trash2 } from "lucide-react";
-import { ChangeEvent } from "react";
 import {
   Select,
   SelectTrigger,
@@ -13,7 +15,6 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { StockItem } from "../stock/stock";
 import { randomKey } from "@/utils/generateRandomKey";
 
 interface RequestsColumnsInterface {

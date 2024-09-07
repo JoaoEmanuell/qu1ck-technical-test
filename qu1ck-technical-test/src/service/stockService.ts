@@ -27,6 +27,11 @@ export class StockService implements StockServiceInterface {
     }
   }
 
+  /**
+   * verify if stock exists using id
+   * @throws notFound response with `{ message: "stock not found" }`
+   * @param id
+   */
   private async getStockOrNotFound(id: number) {
     const stock = await prisma.stocks.findUnique({
       where: {

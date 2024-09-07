@@ -1,4 +1,8 @@
-import { requestReturnDefault } from "@/interfaces/requestInterface";
+/**
+ * Requests controller
+ * Update request status, using new status and id
+ */
+
 import { requestService } from "@/service/requestService";
 import { badRequest } from "@/utils/http/badRequest";
 import { putResponse } from "@/utils/http/putResponse";

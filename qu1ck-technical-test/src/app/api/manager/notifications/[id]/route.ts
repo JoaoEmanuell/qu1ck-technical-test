@@ -1,3 +1,8 @@
+/**
+ * Notifications controller
+ * Delete the notification using id
+*/
+
 import { managerNotificationsService } from "@/service/managerNotificationService";
 import { badRequest } from "@/utils/http/badRequest";
 import { deleteResponse } from "@/utils/http/deleteResponse";

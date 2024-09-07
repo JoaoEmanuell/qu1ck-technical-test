@@ -1,3 +1,7 @@
+/**
+ * Dto for chat
+ */
+
 import { IsNotEmpty, IsString } from "class-validator";
 import "reflect-metadata";
 

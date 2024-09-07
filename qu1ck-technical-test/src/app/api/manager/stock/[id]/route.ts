@@ -1,3 +1,9 @@
+/**
+ * Stock controller
+ * Edit stock using id
+ * Delete stock using id
+ */
+
 import { EditStockDto } from "@/dtos/stockDtos";
 import { stockService } from "@/service/stockService";
 import { errorReport } from "@/utils/errorReport";

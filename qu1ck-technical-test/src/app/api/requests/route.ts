@@ -1,3 +1,9 @@
+/**
+ * Request controller
+ * Get all requests
+ * Create request
+ */
+
 import { CreateRequestDto } from "@/dtos/requestDtos";
 import { requestService } from "@/service/requestService";
 import { errorReport } from "@/utils/errorReport";

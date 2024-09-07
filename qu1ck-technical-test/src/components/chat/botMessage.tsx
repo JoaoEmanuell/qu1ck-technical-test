@@ -1,6 +1,11 @@
+/**
+ * Bot message component
+ * Construct a div with bot message
+ */
+
 interface botMessageProps {
   text: string;
-  awaitResponse: boolean;
+  awaitResponse: boolean; // if true, the div is a skeleton loading div
 }
 
 export const BotMessage = (props: botMessageProps) => {

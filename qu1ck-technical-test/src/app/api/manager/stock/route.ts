@@ -1,3 +1,10 @@
+/**
+ * Stock controller
+ * Get all stock itens
+ * Create stock item
+ * Update stock itens
+ */
+
 import { CreateStockDto, EditStockItens } from "@/dtos/stockDtos";
 import { stockService } from "@/service/stockService";
 import { errorReport } from "@/utils/errorReport";

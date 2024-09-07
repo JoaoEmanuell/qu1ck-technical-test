@@ -1,3 +1,10 @@
+/**
+ * Requests controller
+ * Get request using id
+ * Delete request using id
+ * Update request using id
+ */
+
 import { EditRequestDto } from "@/dtos/requestDtos";
 import { requestService } from "@/service/requestService";
 import { errorReport } from "@/utils/errorReport";

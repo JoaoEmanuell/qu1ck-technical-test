@@ -1,24 +1,11 @@
+/**
+ * Requests session component
+ */
+
 "use client";
 
-import {
-  TableCaption,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  Table,
-  TableCell,
-} from "@/components/ui/table";
 import { randomKey } from "@/utils/generateRandomKey";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
 import { useState } from "react";
-import { Trash2 } from "lucide-react";
 import { DataTable } from "@/components/ui/data-table";
 import { RequestColumns } from "./requestsColumns";
 
@@ -32,13 +19,6 @@ export type request = {
 interface RequestProps {
   requests: request[];
 }
-
-const statusHashMap = {
-  received: "Recebido",
-  in_progress: "Em progresso",
-  completed: "Completado",
-  cancelled: "Cancelado",
-};
 
 export const RequestsComponent = (props: RequestProps) => {
   const [mainDivKey, setMainDivKey] = useState(randomKey());

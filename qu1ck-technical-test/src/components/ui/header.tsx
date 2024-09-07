@@ -1,3 +1,7 @@
+/**
+ * Header component
+ */
+
 "use client";
 
 import {

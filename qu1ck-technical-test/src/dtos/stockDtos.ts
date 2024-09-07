@@ -1,3 +1,7 @@
+/**
+ * Dto for stock
+ */
+
 import "reflect-metadata";
 import {
   IsEnum,

@@ -1,6 +1,7 @@
 "use client";
 /* eslint-disable react/no-unescaped-entities */
 /**
+ * Chat page
  * v0 by Vercel.
  * @see https://v0.dev/t/MOhVtsWozfO
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
@@ -89,7 +90,7 @@ export function ChatPageUi(props: chatPageUiProps) {
 
     await sendMessageToApi(message, messages);
 
-    blockInputs(false);
+    blockInputs(false); // unblock inputs
   };
 
   const constructMessageComponent = (messages: messagesType[]) => {

@@ -1,6 +1,9 @@
 import { createCipheriv, createDecipheriv, scrypt } from "crypto";
 import { promisify } from "util";
 
+/**
+ * Encryption class
+ */
 class Encryption {
   private encryptionPassword: string;
   private iv: Buffer;
@@ -29,15 +32,25 @@ class Encryption {
   private async getDecipher() {
     return createDecipheriv(this.algorithm, await this.getKey(), this.iv);
   }
+  /**
+   * encrypt the text and return in hex format
+   * @param text text in utf-8
+   * @returns text encrypted in hex format
+   */
   async encryptText(text: string) {
     const cipher = await this.getCipher();
     let encrypted = cipher.update(text, "utf-8", "hex");
     encrypted += cipher.final("hex");
     return encrypted;
   }
+  /**
+   * decipher the encrypted text
+   * @param text text encrypted in hex format
+   * @returns text decrypted in utf-8
+   */
   async decipherText(text: string) {
     const decipher = await this.getDecipher();
-    const decrypted = decipher.update(text, "hex", "utf8");
+    const decrypted = decipher.update(text, "hex", "utf-8");
     return decrypted;
   }
 }

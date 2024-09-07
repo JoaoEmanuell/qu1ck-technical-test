@@ -1,3 +1,8 @@
+/**
+ * Add item to stock component
+ * Used for add item to stock and send to api for save
+ */
+
 import {
   Select,
   SelectTrigger,

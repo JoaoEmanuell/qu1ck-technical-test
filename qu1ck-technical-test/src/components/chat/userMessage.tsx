@@ -1,3 +1,8 @@
+/**
+ * User message component
+ * Construct a div with user message
+ */
+
 interface userMessageProps {
   text: string;
 }

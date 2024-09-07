@@ -1,3 +1,8 @@
+/**
+ * Reload button component
+ * Button animated on click
+ */
+
 import { sleep } from "@/utils/sleep";
 import { LucideProps, RefreshCw } from "lucide-react";
 import { useState } from "react";

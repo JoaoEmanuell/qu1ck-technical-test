@@ -1,3 +1,7 @@
+/**
+ * Notifications session component
+ */
+
 import { Button } from "@/components/ui/button";
 import {
   Table,

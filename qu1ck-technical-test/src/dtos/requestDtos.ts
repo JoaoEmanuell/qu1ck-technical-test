@@ -1,3 +1,7 @@
+/**
+ * Dto for requests
+ */
+
 import "reflect-metadata";
 import { RequestStatus } from "@prisma/client";
 import {

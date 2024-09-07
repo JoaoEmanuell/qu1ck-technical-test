@@ -1,3 +1,7 @@
+/**
+ * Dto for notifications
+ */
+
 import { ManagerNotifications } from "@prisma/client";
 import { IsArray, IsNotEmpty, IsString } from "class-validator";
 

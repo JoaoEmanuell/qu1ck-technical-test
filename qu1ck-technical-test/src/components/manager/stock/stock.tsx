@@ -1,7 +1,11 @@
+/**
+ * Stock session component
+ */
+
 "use client";
 
 import { Button } from "../../ui/button";
-import { ChangeEvent, useCallback, useMemo, useState } from "react";
+import { ChangeEvent, useCallback, useState } from "react";
 import { AddItem } from "./addItem";
 import { randomKey } from "@/utils/generateRandomKey";
 import { DataTable } from "@/components/ui/data-table";

@@ -1,3 +1,10 @@
+/**
+ * Notification controller
+ * Get notifications
+ * Create notification
+ * Delete all notifications
+ */
+
 import {
   CreateManagerNotificationDto,
   DeleteManagerNotificationsDto,

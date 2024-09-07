@@ -1,3 +1,7 @@
+/**
+ * Chat page, url/chat
+ */
+
 import { ChatPageUi, messagesType } from "@/components/chat/chatPageUi";
 
 export default function ChatPage() {

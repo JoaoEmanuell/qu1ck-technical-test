@@ -1,3 +1,7 @@
+/**
+ * Chat controller
+ */
+
 import { CreateChatDto } from "@/dtos/chatDtos";
 import { chatService } from "@/service/chatService";
 import { errorReport } from "@/utils/errorReport";

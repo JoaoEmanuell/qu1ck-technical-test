@@ -1,4 +1,9 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+
+/**
+ * Define the stock columns used by data table
+ */
+
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";

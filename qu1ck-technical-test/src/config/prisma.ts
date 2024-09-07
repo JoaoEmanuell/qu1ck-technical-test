@@ -1,3 +1,8 @@
+/**
+ * Prisma instance for access the database.
+ * Prisma is a orm
+ */
+
 import { PrismaClient } from "@prisma/client";
 
 class Singleton {

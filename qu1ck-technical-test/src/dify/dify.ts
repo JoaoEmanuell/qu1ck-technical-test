@@ -1,3 +1,8 @@
+/**
+ * Manager the Dify ai
+ * Used to make requests for AI
+ */
+
 import { DifyInterface, difyReturn } from "@/interfaces/difyInterfaces";
 import { Stocks } from "@prisma/client";
 
@@ -18,10 +23,9 @@ export class Dify implements DifyInterface {
     const body = {
       inputs: {
         stock: stockJson,
-      }, // por alguma razão desconhecida o input não é passado de forma correta para a api, tendo que ser passado dentro da query.
+      },
       response_mode: "blocking",
       user: "common-user",
-      // query: `stock: ${stockJson}\nmessage: ${message}`,
       query: message,
     };
     const response = await fetch(this.host, {
