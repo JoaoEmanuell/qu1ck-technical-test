@@ -19,8 +19,10 @@ import {
 } from "@/components/ui/select";
 import { useState } from "react";
 import { Trash2 } from "lucide-react";
+import { DataTable } from "@/components/ui/data-table";
+import { RequestColumns } from "./requestsColumns";
 
-type request = {
+export type request = {
   id: number;
   request_itens: string;
   date: string;
@@ -76,83 +78,13 @@ export const RequestsComponent = (props: RequestProps) => {
 
   return (
     <div key={mainDivKey} className="overflow-x-auto">
-      <Table>
-        <TableCaption>Pedidos realizados</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Itens</TableHead>
-            <TableHead>Data</TableHead>
-            <TableHead>Status</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {requests.map((request) => {
-            return (
-              <TableRow key={request.id}>
-                <TableCell>
-                  <ul className="list-disc">
-                    {request.request_itens.split(";").map((item) => {
-                      return (
-                        <li key={randomKey()}>{item.replaceAll(`"`, "")}</li>
-                      );
-                    })}
-                  </ul>
-                </TableCell>
-                <TableCell>
-                  {new Date(request.date).toLocaleString("pt-BR", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: false, // Opcional, para formato 24 horas
-                  })}
-                </TableCell>
-                <TableCell>
-                  <Select
-                    onValueChange={(value) => {
-                      changeSelectStatus(
-                        value as request["status"],
-                        request.id
-                      );
-                    }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue
-                        className="text-center"
-                        placeholder={statusHashMap[request.status]}
-                      ></SelectValue>
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="received" className="text-center">
-                        Recebido
-                      </SelectItem>
-                      <SelectItem value="in_progress" className="text-center">
-                        Em progresso
-                      </SelectItem>
-                      <SelectItem value="completed" className="text-center">
-                        Completado
-                      </SelectItem>
-                      <SelectItem value="cancelled" className="text-center">
-                        Cancelado
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                </TableCell>
-                <TableCell>
-                  <Trash2
-                    color="red"
-                    className="cursor-pointer"
-                    onClick={() => {
-                      deleteRequest(request.id);
-                    }}
-                  />
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+      <DataTable
+        columns={RequestColumns({
+          changeSelectStatus: changeSelectStatus,
+          deleteRequest: deleteRequest,
+        })}
+        data={requests}
+      />
     </div>
   );
 };

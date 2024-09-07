@@ -68,15 +68,6 @@ export const NotificationsComponent = (props: NotificationsComponentProps) => {
   return (
     <div key={mainDivKey}>
       <div>
-        <Button
-          variant="destructive"
-          onClick={deleteAllNotifications}
-          disabled={notifications.length !== 0 ? false : true}
-        >
-          Deletar mensagens
-        </Button>
-      </div>
-      <div>
         <Table>
           <TableCaption>
             {notifications.length !== 0
@@ -102,6 +93,15 @@ export const NotificationsComponent = (props: NotificationsComponentProps) => {
             })}
           </TableBody>
         </Table>
+      </div>
+      <div>
+        <Button
+          variant="destructive"
+          onClick={deleteAllNotifications}
+          disabled={notifications.length !== 0 ? false : true}
+        >
+          Deletar mensagens
+        </Button>
       </div>
     </div>
   );
