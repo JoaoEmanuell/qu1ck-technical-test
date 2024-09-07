@@ -1,6 +1,8 @@
 - [qu1ck-technical-test](#qu1ck-technical-test)
   - [Getting Started](#getting-started)
+  - [Documentation](#documentation)
 
+[Português Brasil](./README-pt_br.md)
 
 # qu1ck-technical-test
 
@@ -43,3 +45,7 @@ npm run start
 ```
 
 The default server address is `localhost:8080`.
+
+## Documentation
+
+[Click here for access the api docs](./docs/README.md)

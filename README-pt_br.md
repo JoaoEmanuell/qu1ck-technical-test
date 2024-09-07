@@ -1,5 +1,6 @@
 - [qu1ck-technical-test](#qu1ck-technical-test)
   - [Começando](#começando)
+  - [Documentação](#documentação)
 
 
 # qu1ck-technical-test
@@ -43,3 +44,7 @@ npm run start
 ```
 
 O endereço padrão do servidor é `localhost:8080`
+
+## Documentação
+
+[Clique aqui para acessar a documentação da API](./docs/README-pt_br.md)
