@@ -10,33 +10,33 @@ import { randomKey } from "@/utils/generateRandomKey";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 
-type messagesType = {
+type notificationsType = {
   id: number;
   message: string;
 };
 
-interface MessagesComponentProps {
-  messages: messagesType[];
+interface NotificationsComponentProps {
+  notifications: notificationsType[];
 }
 
-export const MessagesComponent = (props: MessagesComponentProps) => {
+export const NotificationsComponent = (props: NotificationsComponentProps) => {
   const [mainDivKey, setMainDivKey] = useState(randomKey());
-  const [messages, setMessages] = useState<messagesType[] | null>(
-    props.messages
-  );
+  const [notifications, setNotifications] = useState<
+    notificationsType[] | null
+  >(props.notifications);
 
   const deleteMessage = async (id: number) => {
     const response = await fetch(`/api/manager/notifications/${id}/`, {
       method: "DELETE",
     });
     if (response.status === 200) {
-      alert(`Mensagem deletada com sucesso!`);
+      alert(`Notificação deletada com sucesso!`);
       // edit stock object
-      const messagesCopy = [...messages];
-      for (const position in messagesCopy) {
-        if (messagesCopy[position].id === id) {
-          messagesCopy.splice(Number(position), 1);
-          setMessages(messagesCopy);
+      const notificationsCopy = [...notifications];
+      for (const position in notificationsCopy) {
+        if (notificationsCopy[position].id === id) {
+          notificationsCopy.splice(Number(position), 1);
+          setNotifications(notificationsCopy);
           setMainDivKey(randomKey());
           return;
         }
@@ -47,7 +47,7 @@ export const MessagesComponent = (props: MessagesComponentProps) => {
     }
   };
 
-  const deleteAllMessages = async () => {
+  const deleteAllNotifications = async () => {
     const confirmReturn = confirm(
       "Tem certeza que deseja deletar todas as mensagens?"
     );
@@ -56,10 +56,10 @@ export const MessagesComponent = (props: MessagesComponentProps) => {
       await fetch(`/api/manager/notifications/`, {
         method: "PUT",
         body: JSON.stringify({
-          notifications: messages,
+          notifications: notifications,
         }),
       });
-      setMessages([]);
+      setNotifications([]);
       setMainDivKey(randomKey());
       alert("Todas as mensagens foram deletadas com sucesso!");
     }
@@ -70,8 +70,8 @@ export const MessagesComponent = (props: MessagesComponentProps) => {
       <div>
         <Button
           variant="destructive"
-          onClick={deleteAllMessages}
-          disabled={messages.length !== 0 ? false : true}
+          onClick={deleteAllNotifications}
+          disabled={notifications.length !== 0 ? false : true}
         >
           Deletar mensagens
         </Button>
@@ -79,21 +79,21 @@ export const MessagesComponent = (props: MessagesComponentProps) => {
       <div>
         <Table>
           <TableCaption>
-            {messages.length !== 0
+            {notifications.length !== 0
               ? "Mensagens"
               : "Nenhuma mensagem disponível!"}
           </TableCaption>
           <TableBody>
-            {messages.map((message) => {
+            {notifications.map((notification) => {
               return (
-                <TableRow key={message.id}>
-                  <TableCell>{message.message}</TableCell>
+                <TableRow key={notification.id}>
+                  <TableCell>{notification.message}</TableCell>
                   <TableCell>
                     <Trash2
                       color="red"
                       className="cursor-pointer"
                       onClick={() => {
-                        deleteMessage(message.id);
+                        deleteMessage(notification.id);
                       }}
                     />
                   </TableCell>

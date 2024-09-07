@@ -8,7 +8,7 @@
 import { useEffect, useState } from "react";
 import { Stock } from "@/components/manager/stock/stock";
 import { RequestsComponent } from "@/components/manager/requests/requests";
-import { MessagesComponent } from "@/components/manager/messages/messages";
+import { NotificationsComponent } from "@/components/manager/notifications/notifications";
 import { ReloadButton } from "@/components/ui/reloadButton";
 import { randomKey } from "@/utils/generateRandomKey";
 import {
@@ -17,16 +17,18 @@ import {
   NavigationMenuItem,
 } from "@/components/ui/navigation-menu";
 
-type tabs = "Estoque" | "Pedidos" | "Mensagens";
+type tabs = "Estoque" | "Pedidos" | "Notificações";
 
 export default function ManagerPage() {
   const [activeTab, setActiveTab] = useState<tabs>("Estoque");
 
-  const [stockComponent, setStockComponent] = useState<JSX.Element | null>();
+  const [stockComponent, setStockComponent] = useState<JSX.Element | null>(
+    <p>Carregando estoque...</p>
+  );
   const [requestsComponent, setRequestsComponent] =
-    useState<JSX.Element | null>();
-  const [messagesComponent, setMessagesComponent] =
-    useState<JSX.Element | null>();
+    useState<JSX.Element | null>(<p>Carregando pedidos...</p>);
+  const [notificationsComponent, setMessagesComponent] =
+    useState<JSX.Element | null>(<p>Carregando notificações...</p>);
 
   const constructStockComponent = (stock: any[]) => {
     setStockComponent(<Stock stock={stock} key={randomKey()} />);
@@ -38,9 +40,9 @@ export default function ManagerPage() {
     );
   };
 
-  const constructMessagesComponent = (messages: any[]) => {
+  const constructMessagesComponent = (notifications: any[]) => {
     setMessagesComponent(
-      <MessagesComponent messages={messages} key={randomKey()} />
+      <NotificationsComponent notifications={notifications} key={randomKey()} />
     );
   };
 
@@ -100,13 +102,13 @@ export default function ManagerPage() {
               </NavigationMenuItem>
               <NavigationMenuItem
                 onClick={() => {
-                  setActiveTab("Mensagens");
+                  setActiveTab("Notificações");
                 }}
                 className={`cursor-pointer text-primary-foreground p-2 rounded-sm hover:bg-primary transition-all ${
-                  activeTab === "Mensagens" ? "bg-primary" : "bg-blue-400"
+                  activeTab === "Notificações" ? "bg-primary" : "bg-blue-400"
                 }`}
               >
-                Mensagens
+                Notificações
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
@@ -141,18 +143,18 @@ export default function ManagerPage() {
             {requestsComponent}
           </div>
         )}
-        {activeTab === "Mensagens" && (
+        {activeTab === "Notificações" && (
           <div className="bg-card text-card-foreground rounded-lg p-6 shadow-md">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-bold mb-4">
-                Gerenciamento de mensagens
+                Gerenciamento de notificações
               </h2>
               <ReloadButton
                 className="cursor-pointer"
                 onClick={constructComponents}
               />
             </div>
-            {messagesComponent}
+            {notificationsComponent}
           </div>
         )}
       </main>

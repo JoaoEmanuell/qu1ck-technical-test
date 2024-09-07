@@ -90,7 +90,13 @@ export const RequestsComponent = (props: RequestProps) => {
             return (
               <TableRow key={request.id}>
                 <TableCell>
-                  {request.request_itens.replaceAll(",", ", ")}
+                  <ul className="list-disc">
+                    {request.request_itens.split(";").map((item) => {
+                      return (
+                        <li key={randomKey()}>{item.replaceAll(`"`, "")}</li>
+                      );
+                    })}
+                  </ul>
                 </TableCell>
                 <TableCell>
                   {new Date(request.date).toLocaleString("pt-BR", {
