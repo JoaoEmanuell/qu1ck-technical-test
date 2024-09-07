@@ -32,6 +32,12 @@ Install the dependencies.
 npm install
 ```
 
+Run migrations
+
+```bash
+npm run migration:run
+```
+
 Build the project.
 
 ```bash
