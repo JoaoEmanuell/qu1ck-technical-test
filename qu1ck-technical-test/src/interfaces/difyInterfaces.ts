@@ -7,6 +7,7 @@ export type difyReturn = {
 export type difyJson = {
   status: boolean;
   message_for_client?: string;
+  items?: string[];
   database?: Stocks[];
   dev?: string;
 };
