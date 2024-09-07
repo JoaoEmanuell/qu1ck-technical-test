@@ -6,6 +6,7 @@
 import { requestService } from "@/service/requestService";
 import { badRequest } from "@/utils/http/badRequest";
 import { putResponse } from "@/utils/http/putResponse";
+import { responseManager } from "@/utils/http/responseManager";
 import { RequestStatus } from "@prisma/client";
 import { isEnum } from "class-validator";
 
@@ -29,6 +30,6 @@ export async function PUT(request: Request) {
       await requestService.updateRequestStatus(id, status as RequestStatus)
     );
   } catch (err) {
-    return err;
+    return responseManager(err);
   }
 }

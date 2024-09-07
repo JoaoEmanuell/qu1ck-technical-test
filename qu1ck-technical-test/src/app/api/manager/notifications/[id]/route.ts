@@ -1,11 +1,12 @@
 /**
  * Notifications controller
  * Delete the notification using id
-*/
+ */
 
 import { managerNotificationsService } from "@/service/managerNotificationService";
 import { badRequest } from "@/utils/http/badRequest";
 import { deleteResponse } from "@/utils/http/deleteResponse";
+import { responseManager } from "@/utils/http/responseManager";
 
 export async function DELETE(request: Request) {
   const url = new URL(request.url);
@@ -20,6 +21,6 @@ export async function DELETE(request: Request) {
       await managerNotificationsService.deleteNotification(Number(id))
     );
   } catch (err) {
-    return err;
+    return responseManager(err);
   }
 }

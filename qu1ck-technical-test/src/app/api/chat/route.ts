@@ -7,6 +7,7 @@ import { chatService } from "@/service/chatService";
 import { errorReport } from "@/utils/errorReport";
 import { badRequest } from "@/utils/http/badRequest";
 import { createResponse } from "@/utils/http/createResponse";
+import { responseManager } from "@/utils/http/responseManager";
 import { validateDto } from "@/utils/validators/validationDto";
 
 export async function POST(request: Request) {
@@ -22,5 +23,9 @@ export async function POST(request: Request) {
     return badRequest(erros);
   }
 
-  return createResponse(await chatService.createRequest(json));
+  try {
+    return createResponse(await chatService.createRequest(json));
+  } catch (err) {
+    return responseManager(err);
+  }
 }

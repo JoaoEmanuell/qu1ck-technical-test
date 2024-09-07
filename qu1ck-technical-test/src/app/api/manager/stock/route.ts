@@ -11,6 +11,7 @@ import { errorReport } from "@/utils/errorReport";
 import { badRequest } from "@/utils/http/badRequest";
 import { createResponse } from "@/utils/http/createResponse";
 import { putResponse } from "@/utils/http/putResponse";
+import { responseManager } from "@/utils/http/responseManager";
 import { validateDto } from "@/utils/validators/validationDto";
 import { Stocks } from "@prisma/client";
 
@@ -33,7 +34,7 @@ export async function POST(request: Request) {
   try {
     return createResponse(await stockService.createStock(json));
   } catch (err) {
-    return err;
+    return responseManager(err);
   }
 }
 
@@ -57,6 +58,6 @@ export async function PUT(request: Request) {
   try {
     return putResponse(await stockService.editStockItens(data as Stocks[]));
   } catch (err) {
-    return err;
+    return responseManager(err);
   }
 }

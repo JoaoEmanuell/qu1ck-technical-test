@@ -11,6 +11,7 @@ import { errorReport } from "@/utils/errorReport";
 import { badRequest } from "@/utils/http/badRequest";
 import { deleteResponse } from "@/utils/http/deleteResponse";
 import { putResponse } from "@/utils/http/putResponse";
+import { responseManager } from "@/utils/http/responseManager";
 import { validateDto } from "@/utils/validators/validationDto";
 
 export async function GET(request: Request) {
@@ -24,7 +25,7 @@ export async function GET(request: Request) {
   try {
     return Response.json(await requestService.getRequest(id));
   } catch (err) {
-    return err;
+    return responseManager(err);
   }
 }
 
@@ -40,7 +41,7 @@ export async function DELETE(request: Request) {
     return deleteResponse(await requestService.deleteRequest(Number(id)));
   } catch (err) {
     console.error(err);
-    return err;
+    return responseManager(err);
   }
 }
 
@@ -68,6 +69,6 @@ export async function PUT(request: Request) {
   try {
     return putResponse(await requestService.updateRequest(Number(id), json));
   } catch (err) {
-    return err;
+    return responseManager(err);
   }
 }

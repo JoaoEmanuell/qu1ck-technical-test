@@ -14,6 +14,7 @@ import { errorReport } from "@/utils/errorReport";
 import { badRequest } from "@/utils/http/badRequest";
 import { createResponse } from "@/utils/http/createResponse";
 import { deleteResponse } from "@/utils/http/deleteResponse";
+import { responseManager } from "@/utils/http/responseManager";
 import { validateDto } from "@/utils/validators/validationDto";
 
 export async function GET(request: Request) {
@@ -37,7 +38,7 @@ export async function POST(request: Request) {
       await managerNotificationsService.createNotification(json)
     );
   } catch (err) {
-    return err;
+    return responseManager(err);
   }
 }
 
@@ -60,6 +61,6 @@ export async function PUT(request: Request) {
       )
     );
   } catch (err) {
-    return err;
+    return responseManager(err);
   }
 }

@@ -10,6 +10,7 @@ import { errorReport } from "@/utils/errorReport";
 import { badRequest } from "@/utils/http/badRequest";
 import { deleteResponse } from "@/utils/http/deleteResponse";
 import { putResponse } from "@/utils/http/putResponse";
+import { responseManager } from "@/utils/http/responseManager";
 import { validateDto } from "@/utils/validators/validationDto";
 
 export async function PUT(request: Request) {
@@ -35,7 +36,7 @@ export async function PUT(request: Request) {
   try {
     return putResponse(await stockService.editStockItem(Number(id), json));
   } catch (err) {
-    return err;
+    return responseManager(err);
   }
 }
 
@@ -50,6 +51,6 @@ export async function DELETE(request: Request) {
   try {
     return deleteResponse(await stockService.deleteStockItem(Number(id)));
   } catch (err) {
-    return err;
+    return responseManager(err);
   }
 }

@@ -9,6 +9,7 @@ import { requestService } from "@/service/requestService";
 import { errorReport } from "@/utils/errorReport";
 import { badRequest } from "@/utils/http/badRequest";
 import { createResponse } from "@/utils/http/createResponse";
+import { responseManager } from "@/utils/http/responseManager";
 import { validateDto } from "@/utils/validators/validationDto";
 
 export async function GET(request: Request) {
@@ -30,6 +31,6 @@ export async function POST(request: Request) {
   try {
     return createResponse(await requestService.createRequest(json));
   } catch (err) {
-    return err;
+    return responseManager(err);
   }
 }
