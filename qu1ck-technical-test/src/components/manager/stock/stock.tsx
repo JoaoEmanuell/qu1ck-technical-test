@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "../../ui/button";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useCallback, useMemo, useState } from "react";
 import { AddItem } from "./addItem";
 import { randomKey } from "@/utils/generateRandomKey";
 import { DataTable } from "@/components/ui/data-table";
@@ -23,60 +23,65 @@ export const Stock = (props: StockProps) => {
   const [addDivElement, setAddDivElement] = useState<JSX.Element[] | null>([]);
   const [mainDivElementKey, setMainDivElementKey] = useState(randomKey());
 
-  const changeStockObject = (
-    event: ChangeEvent<HTMLInputElement> | string,
-    id: number,
-    keyToChange: keyof StockItem,
-    dividerFactor: number
-  ) => {
-    console.log("change stock");
+  const changeStockObject = useCallback(
+    (
+      event: ChangeEvent<HTMLInputElement> | string,
+      id: number,
+      keyToChange: keyof StockItem,
+      dividerFactor: number
+    ) => {
+      const handleGetTheCorrectValue = (value: string) => {
+        if (keyToChange === "quantity")
+          return Math.abs(Number(value) * dividerFactor);
+        else return value.trim();
+      };
 
-    const handleGetTheCorrectValue = (value: string) => {
-      if (keyToChange === "quantity")
-        return Math.abs(Number(value) * dividerFactor);
-      else return value.trim();
-    };
-    const stockCopy = [...stock];
-    for (const position in stockCopy) {
-      if (stockCopy[position].id === id) {
-        stockCopy[position] = {
-          ...stockCopy[position],
-          [keyToChange]: handleGetTheCorrectValue(
-            typeof event === "object" ? event.target.value : event
-          ),
-        };
-        setStock(stockCopy);
-        return;
+      const stockCopy = [...stock];
+      for (const position in stockCopy) {
+        if (stockCopy[position].id === id) {
+          stockCopy[position] = {
+            ...stockCopy[position],
+            [keyToChange]: handleGetTheCorrectValue(
+              typeof event === "object" ? event.target.value : event
+            ),
+          };
+          setStock(stockCopy);
+          return;
+        }
       }
-    }
-  };
+    },
+    [stock, setStock]
+  );
 
   const addItemToStock = () => {
     setAddDivElement([...addDivElement, <AddItem key={randomKey()} />]);
   };
 
-  const deleteItem = async (id: number) => {
-    // delete on api
-    const response = await fetch(`/api/manager/stock/${id}`, {
-      method: "DELETE",
-    });
-    if (response.status === 200) {
-      alert("Item deletado com sucesso");
-    } else {
-      const json = await response.json();
-      alert(`Erro ao deletar o item: ${json.error_description}`);
-    }
-    // edit stock object
-    const stockCopy = [...stock];
-    for (const position in stockCopy) {
-      if (stockCopy[position].id === id) {
-        stockCopy.splice(Number(position), 1);
-        setStock(stockCopy);
-        setMainDivElementKey(randomKey());
-        return;
+  const deleteItem = useCallback(
+    async (id: number) => {
+      // delete on api
+      const response = await fetch(`/api/manager/stock/${id}`, {
+        method: "DELETE",
+      });
+      if (response.status === 200) {
+        alert("Item deletado com sucesso");
+      } else {
+        const json = await response.json();
+        alert(`Erro ao deletar o item: ${json.error_description}`);
       }
-    }
-  };
+      // edit stock object
+      const stockCopy = [...stock];
+      for (const position in stockCopy) {
+        if (stockCopy[position].id === id) {
+          stockCopy.splice(Number(position), 1);
+          setStock(stockCopy);
+          setMainDivElementKey(randomKey());
+          return;
+        }
+      }
+    },
+    [stock, setStock]
+  );
 
   const saveStock = async () => {
     const response = await fetch("/api/manager/stock", {
@@ -104,7 +109,11 @@ export const Stock = (props: StockProps) => {
         {...addDivElement}
         <div className="flex items-center space-x-4">
           <Button onClick={addItemToStock}>Adicionar item</Button>
-          <Button onClick={saveStock} variant="green">
+          <Button
+            onClick={saveStock}
+            variant="green"
+            disabled={props.stock === stock}
+          >
             Salvar alterações
           </Button>
         </div>

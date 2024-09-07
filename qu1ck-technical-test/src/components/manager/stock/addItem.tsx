@@ -33,6 +33,8 @@ export const AddItem = () => {
       throw "Invalid element";
     }
     quantity = Math.abs(Number(quantity) * (measurement === "unit" ? 1 : 1000));
+    console.log(quantity);
+
     return [ingredientName, quantity];
   };
 

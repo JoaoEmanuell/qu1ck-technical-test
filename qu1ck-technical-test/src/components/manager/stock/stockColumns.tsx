@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
@@ -13,6 +14,9 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { table } from "console";
+import React from "react";
+import { stockObject } from "@/interfaces/stockInterfaces";
 
 interface StockColumnsInterface {
   changeStockObject: (
@@ -59,6 +63,44 @@ export const StockColumns = (props: StockColumnsInterface) => {
           </Button>
         );
       },
+      cell: ({ row }) => {
+        const initialValue = row.getValue("ingredient_name");
+        const unitOfMeasurement = row.getValue(
+          "unit_of_measurement"
+        ) as stockObject["unit_of_measurement"];
+        const dividerFactor = Number(unitOfMeasurement === "unit" ? 1 : 1000);
+        const [value, setValue] = React.useState(initialValue);
+
+        // Sincronizar o estado local com o valor inicial
+        React.useEffect(() => {
+          setValue(initialValue);
+        }, [initialValue]);
+
+        // Atualizar o estado local sem interferir no global durante a digitação
+        const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+          setValue(event.target.value); // Atualiza apenas o estado local
+        };
+
+        // Atualizar o estado global somente quando o input perde o foco
+        const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+          props.changeStockObject(
+            event,
+            row.getValue("id"),
+            "ingredient_name",
+            dividerFactor
+          );
+        };
+
+        return (
+          <Input
+            type="text"
+            className="text-center"
+            value={value as string}
+            onChange={handleChange} // Muda o valor local durante a digitação
+            onBlur={handleBlur} // Atualiza o estado global quando o foco sai do input
+          />
+        );
+      },
     },
     {
       accessorKey: "quantity",
@@ -74,12 +116,34 @@ export const StockColumns = (props: StockColumnsInterface) => {
         );
       },
       cell: ({ row }) => {
-        const quantity = row.getValue("quantity");
-        const dividerFactor = Number(
-          row.getValue("unit_of_measurement") === "unit" ? 1 : 100
-        );
+        const initialValue = row.getValue("quantity");
+        const unitOfMeasurement = row.getValue(
+          "unit_of_measurement"
+        ) as stockObject["unit_of_measurement"];
+        const dividerFactor = Number(unitOfMeasurement === "unit" ? 1 : 1000);
+        const [value, setValue] = React.useState(initialValue);
 
-        const formatted = Math.abs(Number(quantity) / dividerFactor);
+        // Sincronizar o estado local com o valor inicial
+        React.useEffect(() => {
+          const quantity = initialValue;
+          const formatted = Math.abs(Number(quantity) / dividerFactor);
+          setValue(formatted.toFixed(unitOfMeasurement === "unit" ? 0 : 1));
+        }, [initialValue, unitOfMeasurement, dividerFactor]);
+
+        // Atualizar o estado local sem interferir no global durante a digitação
+        const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+          setValue(event.target.value); // Atualiza apenas o estado local
+        };
+
+        // Atualizar o estado global somente quando o input perde o foco
+        const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+          props.changeStockObject(
+            event,
+            row.getValue("id"),
+            "quantity",
+            dividerFactor
+          );
+        };
 
         return (
           <Input
@@ -89,17 +153,9 @@ export const StockColumns = (props: StockColumnsInterface) => {
             min={0}
             className="w-24 text-center"
             step={row.getValue("unit_of_measurement") === "unit" ? 1 : 0.1}
-            defaultValue={parseFloat(`${formatted}`).toFixed(
-              row.getValue("unit_of_measurement") === "unit" ? 0 : 1
-            )}
-            onChange={(element) => {
-              props.changeStockObject(
-                element,
-                row.getValue("id"),
-                "quantity",
-                dividerFactor
-              );
-            }}
+            value={value as number}
+            onChange={handleChange} // Muda o valor local durante a digitação
+            onBlur={handleBlur} // Atualiza o estado global quando o foco sai do input
           />
         );
       },
@@ -109,7 +165,7 @@ export const StockColumns = (props: StockColumnsInterface) => {
       header: "Unidade de medida",
       cell: ({ row }) => {
         const dividerFactor = Number(
-          row.getValue("unit_of_measurement") === "unit" ? 1 : 100
+          row.getValue("unit_of_measurement") === "unit" ? 1 : 1000
         );
         const unitOfMeasurement = row.getValue(
           "unit_of_measurement"
@@ -120,7 +176,7 @@ export const StockColumns = (props: StockColumnsInterface) => {
               props.changeStockObject(
                 element,
                 row.getValue("id"),
-                "quantity",
+                "unit_of_measurement",
                 dividerFactor
               );
             }}
