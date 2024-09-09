@@ -1,5 +1,8 @@
 - [qu1ck-technical-test](#qu1ck-technical-test)
   - [Começando](#começando)
+    - [Docker](#docker)
+      - [Migrations](#migrations)
+    - [Node](#node)
   - [Documentação](#documentação)
 
 
@@ -13,6 +16,59 @@ Possuindo um sistema de gerenciamento de estoque, pedidos e notificações caso 
 
 ## Começando
 
+### Docker
+
+```
+docker-compose=>2.24.6
+docker=>24.0.7
+```
+
+Copie o .env e preencha as informações dele
+
+```bash
+cp .env_example ./qu1ck-technical-test/.env
+```
+
+Faça a build do projeto
+
+```bash
+docker compose build
+```
+
+Suba o container
+
+```bash
+docker compose up -d
+```
+
+#### Migrations
+
+Só deve ser realizadas na primeira execução do container
+
+Acesse o container web usando `sh`
+
+```bash
+docker container exec -it qu1ck-technical-test-web-1 sh
+```
+
+Execute as migrations
+
+```bash
+npm run migration:run
+```
+
+Saia do container
+
+```bash
+exit
+```
+
+---
+
+Seu aplicativo está disponível em `localhost:8080`
+
+### Node
+
 Acesse o diretório do projeto.
 
 ```bash
@@ -22,7 +78,7 @@ cd qu1ck-technical-test
 Copie o .env e preencha as informações dele
 
 ```bash
-cp .env_example .env
+cp .env_example ./qu1ck-technical-test/.env
 ```
 
 Instale as dependências
