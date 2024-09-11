@@ -88,6 +88,12 @@ Install the dependencies.
 npm install
 ```
 
+Run the prisma generate
+
+```bash
+npm run prisma:generate
+```
+
 Build the project.
 
 ```bash

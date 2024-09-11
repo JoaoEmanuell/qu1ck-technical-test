@@ -87,6 +87,12 @@ Instale as dependências
 npm install
 ```
 
+Execute o prisma generate
+
+```bash
+npm run prisma:generate
+```
+
 Faça a build
 
 ```bash
