@@ -1,33 +1,23 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+name: Continuos Integration
 
-name: Continuous Integration
-
-on:
+on: 
   pull_request:
-    branches: [ "master" ]
+    branches:
+      ["master"]
 
 jobs:
-  build:
-
+  continuos_integration:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x, 22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: run install and build
-      run: |
-        ls -l
-        cd qu1ck-technical-test
-        ls -l
-        npm install
-        npm run prisma:generate
-        npm run build
+      - uses: actions/checkout@v4 # Clone the repository to vm
+      - name: Using Node.js
+        uses: actions/setup-node@v4 # Install the node in vm
+        with:
+          node-version: 20.
+      - name: run install and build
+        run: |
+          cd qu1ck-technical-test
+          npm install
+          npm run prisma:generate
+          npm run build
