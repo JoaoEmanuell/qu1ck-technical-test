@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --port 8080",
-    "build": "next build",
+    "build": "CI=false && next build",
     "start": "next start --port 8080",
     "lint": "next lint",
     "migration:run": "prisma migrate deploy",
