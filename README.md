@@ -79,13 +79,19 @@ cd qu1ck-technical-test
 Copy the .env file and fill in the required information.
 
 ```bash
-cp .env_example ./qu1ck-technical-test/.env
+cp ../.env_example .env
 ```
 
 Install the dependencies.
 
 ```bash
 npm install
+```
+
+Run the prisma generate
+
+```bash
+npm run prisma:generate
 ```
 
 Run migrations
