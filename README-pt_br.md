@@ -93,6 +93,12 @@ Execute o prisma generate
 npm run prisma:generate
 ```
 
+Execute as migrações
+
+```bash
+npm run migration:run
+```
+
 Faça a build
 
 ```bash

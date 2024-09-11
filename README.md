@@ -94,6 +94,12 @@ Run the prisma generate
 npm run prisma:generate
 ```
 
+Run migrations
+
+```bash
+npm run migration:run
+```
+
 Build the project.
 
 ```bash
