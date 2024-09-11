@@ -26,7 +26,9 @@ jobs:
         cache: 'npm'
     - name: run install and build
       run: |
+        ls -l
         cd qu1ck-technical-test
+        ls -l
         npm install
         npm run prisma:generate
         npm run build
